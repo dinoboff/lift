@@ -9,10 +9,6 @@ angular.module('liftApp', [
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'partials/main',
-        controller: 'MainCtrl'
-      })
-      .when('/home', {
         templateUrl: 'partials/home',
         controller: 'HomeCtrl'
       })
