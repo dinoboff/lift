@@ -6,9 +6,13 @@ describe('Controller: NavCtrl', function() {
 
   var NavbarCtrl,
       location,
-      scope;
+      scope, $httpBackend;
 
-  beforeEach(inject(function($rootScope, $controller, $location) {
+  beforeEach(inject(function($rootScope, $controller, $location, _$httpBackend_) {
+    $httpBackend = _$httpBackend_;
+    $httpBackend.expectGET('/api/users')
+        .respond([{name: 'User 1', username: 'user1'},{name: 'User 2', username:'user2'}]);
+
     scope = $rootScope.$new();
     location = $location;
     NavbarCtrl = $controller('NavbarCtrl', {
@@ -23,14 +27,19 @@ describe('Controller: NavCtrl', function() {
   });
 
   it ('should provide a list of users to display in navbar', function(){
+    expect(scope.users).toBeUndefined();
+    $httpBackend.flush();
     var users = scope.users;
     expect(users).toBeDefined();
-    expect(users.length).toBe(3);
-    expect(scope.activeUser).toBe(users[0]);
+    expect(scope.activeUser).toBeDefined();
+    expect(users.length).toBe(2);
+    expect(scope.activeUser.name).toBe(users[0].name);
   });
 
   it ('should set the chosen user as the active user', function() {
+    $httpBackend.flush();
     var users = scope.users;
+
     expect(scope.activeUser).toBe(users[0]);
     scope.chooseUser(users[1]);
     expect(scope.activeUser).toBe(users[1]);

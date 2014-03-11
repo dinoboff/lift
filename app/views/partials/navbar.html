@@ -17,10 +17,10 @@
       </ul>
       <ul class="nav navbar-nav pull-right">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">User:  {{activeUser}} <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">User:  {{activeUser.name}} <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li ng-repeat="user in users" ng-click="chooseUser(user)">
-              <a href="">{{user}}</a>
+              <a href="">{{user.name}}</a>
             </li>
           </ul>
         </li>

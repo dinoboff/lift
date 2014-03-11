@@ -41,10 +41,8 @@
     <!-- build:js(app) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js"></script>
     <script src="bower_components/angular/angular.js"></script>
-
-
+    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
@@ -52,10 +50,15 @@
     <!-- endbower -->
     <!-- endbuild -->
 
+    <!-- build:js(bootstrap) scripts/bootstrap.js -->
+    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js"></script>
+    <!-- endbuild -->
+
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/controllers/navbar.js"></script>
     <script src="scripts/controllers/home.js"></script>
+    <script src="scripts/services/User.js"></script>
     <!-- endbuild -->
 </body>
 
