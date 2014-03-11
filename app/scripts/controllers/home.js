@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('liftApp')
-  .controller('MainCtrl', function ($scope, $http) {
+  .controller('HomeCtrl', function ($scope, $http) {
     $http.get('/api/awesomeThings').success(function(awesomeThings) {
       $scope.awesomeThings = awesomeThings;
     });

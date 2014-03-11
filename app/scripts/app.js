@@ -12,6 +12,10 @@ angular.module('liftApp', [
         templateUrl: 'partials/main',
         controller: 'MainCtrl'
       })
+      .when('/home', {
+        templateUrl: 'partials/home',
+        controller: 'HomeCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
