@@ -43,6 +43,6 @@ describe('Controller: NavCtrl', function() {
     expect(scope.activeUser).toBe(users[0]);
     scope.chooseUser(users[1]);
     expect(scope.activeUser).toBe(users[1]);
-  })
+  });
 
 });

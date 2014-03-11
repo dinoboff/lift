@@ -30,7 +30,7 @@ angular.module('liftApp')
       };
 
       $scope.activeUser = {};
-      $http.get("/api/users").then(function (users) {
+      $http.get('/api/users').then(function (users) {
         $scope.users = users.data;
         $scope.activeUser = $scope.users[0];
       });
@@ -38,5 +38,5 @@ angular.module('liftApp')
 
       $scope.chooseUser = function (user) {
         $scope.activeUser = user;
-      }
+      };
     }]);

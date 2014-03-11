@@ -1,2 +1,13 @@
 <div ng-include="'partials/navbar'"></div>
-<p>This is the home view.</p>
+<div class="container-fluid" id="main-container">
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      
+      <ul class="nav nav-sidebar">
+        <li ng-repeat="meter in meters">
+          <a href="">{{meter}}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
