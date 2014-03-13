@@ -3,6 +3,11 @@ lift
 
 Medicine Management
 
+## On a new machine
+
+1. `gem install --pre sass`
+2. `npm install -g bower grunt-cli`
+
 ## Setup
 
 1. `npm install -g grunt-cli`
