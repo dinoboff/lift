@@ -5,7 +5,7 @@ describe('Controller: TestresultsCtrl', function () {
   // load the controller's module
   beforeEach(module('liftApp'));
 
-  var TestresultsCtrl,
+  var TestResultsCtrl,
     scope,
     $httpBackend;
 
@@ -15,7 +15,7 @@ describe('Controller: TestresultsCtrl', function () {
     $httpBackend.expectGET('/api/testResults')
       .respond([{'testName':'test1',date:'01/11/2014',result:'Normal'},{'testName':'test2',date:'01/11/2014',result:'Normal'}]);
     scope = $rootScope.$new();
-    TestresultsCtrl = $controller('TestresultsCtrl', {
+    TestResultsCtrl = $controller('TestResultsCtrl', {
       $scope: scope
     });
   }));
