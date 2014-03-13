@@ -24,6 +24,42 @@ module.exports = function (grunt) {
       app: require('./bower.json').appPath || 'app',
       dist: 'dist'
     },
+    
+    autoshot: {
+      default_options: {
+        options: {
+          path: 'screenshots/',
+          remote: {
+            files: [
+              {
+                src: 'http://localhost:<%= express.options.port %>/#/',
+                dest: 'mainpage.jpg',
+                delay: 5000
+              },
+              {
+                src: 'http://localhost:<%= express.options.port %>/#/',
+                dest: 'mainpage2.jpg',
+                delay: 5000
+              }
+            ]
+          },
+          local: false,
+          viewport: ['1024x655']
+        }
+      }
+    },
+    compress: {
+      screenshots: {
+        options: {
+          archive: 'screenshots/screenshots.zip'
+        },
+        files: [{
+          expand: true,
+          src: ['screenshots/*.jpg'],
+          dest: '/'
+        }]
+      }
+    },
     express: {
       options: {
         port: process.env.PORT || 8888,
@@ -476,7 +512,13 @@ module.exports = function (grunt) {
   grunt.registerTask('express-keepalive', 'Keep grunt running', function () {
     this.async();
   });
-
+  grunt.registerTask('screenshots',[
+    'clean:server',
+    'build',
+    'express:dev',
+    'autoshot',
+    'compress'
+  ]);
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'express:prod', 'express-keepalive']);
