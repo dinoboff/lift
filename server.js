@@ -20,6 +20,7 @@ require('./lib/config/express')(app);
 // Routing
 require('./lib/routes')(app);
 
+app.set("domain", config.host);
 // Start server
 app.listen(config.port, config.host, function () {
   console.log('Express server listening on port %d(%s)in %s mode', config.port,config.host, app.get('env'));
