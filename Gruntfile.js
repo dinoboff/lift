@@ -32,14 +32,19 @@ module.exports = function (grunt) {
           remote: {
             files: [
               {
-                src: 'http://localhost:<%= express.options.port %>/#/',
+                src: 'http://localhost:<%= express.options.port %>/',
                 dest: 'mainpage.jpg',
-                delay: 5000
+                delay: 1000
               },
               {
-                src: 'http://localhost:<%= express.options.port %>/#/',
-                dest: 'mainpage2.jpg',
-                delay: 5000
+                src: 'http://localhost:<%= express.options.port %>/medicine',
+                dest: 'medicine.jpg',
+                delay: 1000
+              },
+              {
+                src: 'http://localhost:<%= express.options.port %>/testResults',
+                dest: 'testResults.jpg',
+                delay: 1000
               }
             ]
           },
@@ -513,8 +518,7 @@ module.exports = function (grunt) {
     this.async();
   });
   grunt.registerTask('screenshots',[
-    'clean:server',
-    'build',
+    'concurrent:server',
     'express:dev',
     'autoshot',
     'compress'
