@@ -7,6 +7,7 @@ Medicine Management
 
 1. `npm install -g grunt-cli`
 2. `npm install`
+3. `bower install`
 3. `grunt server`
 
 ## Development
