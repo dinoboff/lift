@@ -498,7 +498,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer',
       'express:dev',
-      'open',
+      //'open', //not working in nitrous evnironment
       'watch'
     ]);
   });
