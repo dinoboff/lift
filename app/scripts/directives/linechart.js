@@ -1,5 +1,7 @@
 'use strict';
 
+var Holder = Holder || {};
+
 var app = angular.module('liftApp');
 app.directive('linechart', function () {
   return {

@@ -16,6 +16,14 @@ angular.module('liftApp', [
         templateUrl: 'partials/medicine',
         controller: 'MedicineCtrl'
       })
+      .when('/testResults', {
+        templateUrl: 'partials/testResults.html',
+        controller: 'TestresultsCtrl'
+      })
+      .when('/testResults', {
+        templateUrl: 'partials/testresults',
+        controller: 'TestresultsCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
