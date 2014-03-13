@@ -6,7 +6,7 @@ angular.module('liftApp', [
   'ngSanitize',
   'ngRoute'
 ])
-  .config(function ($routeProvider, $locationProvider) {
+  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'partials/home',
@@ -29,4 +29,4 @@ angular.module('liftApp', [
       });
       
     $locationProvider.html5Mode(true);
-  });
+  }]);
