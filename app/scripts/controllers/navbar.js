@@ -20,13 +20,25 @@ angular.module('liftApp')
       $scope.isActive = function (route) {
         return route === $location.path();
       };
-
-      $scope.activeUser = {};
-      $http.get('/api/users').then(function (users) {
-        $scope.users = users.data;
-        $scope.activeUser = $scope.users[0];
-      });
-
+      $scope.users = [
+        {
+          name: 'Melba Brewster',
+          username: 'melba'
+        },
+        {
+          name: 'Harriett Hodges',
+          username: 'hhodges'
+        },
+        {
+          name: 'Thomas Frost',
+          username: 'tfrost'
+        },
+        {
+          name: 'Diane Sparks',
+          username: 'sparks231'
+        }
+      ];
+      $scope.activeUser = $scope.users[0];
 
       $scope.chooseUser = function (user) {
         $scope.activeUser = user;

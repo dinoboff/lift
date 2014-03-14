@@ -10,8 +10,8 @@ describe('Controller: NavCtrl', function() {
 
   beforeEach(inject(function($rootScope, $controller, $location, _$httpBackend_) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/users')
-        .respond([{name: 'User 1', username: 'user1'},{name: 'User 2', username:'user2'}]);
+//    $httpBackend.expectGET('/api/users')
+//        .respond([{name: 'User 1', username: 'user1'},{name: 'User 2', username:'user2'}]);
 
     scope = $rootScope.$new();
     location = $location;
@@ -27,17 +27,17 @@ describe('Controller: NavCtrl', function() {
   });
 
   it ('should provide a list of users to display in navbar', function(){
-    expect(scope.users).toBeUndefined();
-    $httpBackend.flush();
+//    expect(scope.users).toBeUndefined();
+//    $httpBackend.flush();
     var users = scope.users;
     expect(users).toBeDefined();
     expect(scope.activeUser).toBeDefined();
-    expect(users.length).toBe(2);
+    expect(users.length).toBe(4);
     expect(scope.activeUser.name).toBe(users[0].name);
   });
 
   it ('should set the chosen user as the active user', function() {
-    $httpBackend.flush();
+//    $httpBackend.flush();
     var users = scope.users;
 
     expect(scope.activeUser).toBe(users[0]);

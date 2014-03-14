@@ -12,8 +12,8 @@ describe('Controller: MedicineCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/activeMedicines')
-      .respond([{drugName: 'd1',dosage:'100 mg',classification:'aa'},{drugName: 'd2',dosage:'10 mg',classification:'ab'}]);
+//    $httpBackend.expectGET('/api/activeMedicines')
+//      .respond([{drugName: 'd1',dosage:'100 mg',classification:'aa'},{drugName: 'd2',dosage:'10 mg',classification:'ab'}]);
     scope = $rootScope.$new();
     MedicineCtrl = $controller('MedicineCtrl', {
       $scope: scope
@@ -21,9 +21,9 @@ describe('Controller: MedicineCtrl', function () {
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.activeMedicines).toBeUndefined();
-    $httpBackend.flush();
-    expect(scope.activeMedicines.length).toBe(2);
-    expect(scope.activeMedicines[0].drugName).toBe('d1');
+//    expect(scope.activeMedicines).toBeUndefined();
+//    $httpBackend.flush();
+    expect(scope.activeMedicines.length).toBe(4);
+    expect(scope.activeMedicines[0].drugName).toBe('Metformin');
   });
 });

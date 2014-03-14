@@ -2,7 +2,14 @@
 
 angular.module('liftApp')
     .controller('HomeCtrl', ['$scope', '$http', function ($scope, $http) {
-      $http.get('/api/meters').then(function (result) {
-        $scope.meters = result.data;
-      });
+      $scope.meters = [
+        "127",
+        "Abdominal Cramps",
+        "Benadryl",
+        "Calories",
+        "Constipation",
+        "Decreased Hearing",
+        "Ear Ache",
+        "Ear Echo Right"
+      ];
     }]);
