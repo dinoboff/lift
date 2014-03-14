@@ -12,8 +12,8 @@ describe('Controller: TestresultsCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
     $httpBackend = _$httpBackend_;
-    $httpBackend.expectGET('/api/testResults')
-      .respond([{'testName':'test1',date:'01/11/2014',result:'Normal'},{'testName':'test2',date:'01/11/2014',result:'Normal'}]);
+//    $httpBackend.expectGET('/api/testResults')
+//      .respond([{'testName':'test1',date:'01/11/2014',result:'Normal'},{'testName':'test2',date:'01/11/2014',result:'Normal'}]);
     scope = $rootScope.$new();
     TestResultsCtrl = $controller('TestResultsCtrl', {
       $scope: scope
@@ -21,8 +21,8 @@ describe('Controller: TestresultsCtrl', function () {
   }));
 
   it('should attach a list of testResults to the scope', function () {
-    expect(scope.testResults).toBeUndefined();
-    $httpBackend.flush();
-    expect(scope.testResults.length).toBe(2);
+//    expect(scope.testResults).toBeUndefined();
+//    $httpBackend.flush();
+    expect(scope.testResults.length).toBe(5);
   });
 });

@@ -2,7 +2,31 @@
 
 angular.module('liftApp')
   .controller('TestResultsCtrl', ['$scope', '$http', function ($scope, $http) {
-    $http.get('/api/testResults').success(function(results) {
-      $scope.testResults = results;
-    });
+     $scope.testResults = [
+       {
+         testName: 'Urine Test',
+         date: '11/14/2013',
+         result: 'Normal'
+       },
+       {
+         testName: 'Blood Test',
+         date: '11/14/2013',
+         result: 'Normal'
+       },
+       {
+         testName: 'Blood Glucose Test',
+         date: '11/14/2013',
+         result: 'Normal'
+       },
+       {
+         testName: 'Blood Urea Nitrogen (BUN) Test',
+         date: '11/14/2013',
+         result: 'Normal'
+       },
+       {
+         testName: 'Electrocardiogram (ECG) Test',
+         date: '11/12/2013',
+         result: 'Normal'
+       }
+     ];
   }]);

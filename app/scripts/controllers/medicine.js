@@ -1,8 +1,27 @@
 'use strict';
 
 angular.module('liftApp')
-  .controller('MedicineCtrl', ['$scope', '$http', function ($scope, $http) {
-    $http.get('/api/activeMedicines').success(function(activeMedicines) {
-      $scope.activeMedicines = activeMedicines;
-    });
-  }]);
+    .controller('MedicineCtrl', ['$scope', '$http', function ($scope, $http) {
+      $scope.activeMedicines = [
+        {
+          drugName: 'Metformin',
+          dosage: '500 mg 2-3 times daily',
+          classification: 'Anti Diabetic agents'
+        },
+        {
+          drugName: 'Amidiopine',
+          dosage: '2.5 mg once daily',
+          classification: 'Calcium Antagonist'
+        },
+        {
+          drugName: 'Catapres',
+          dosage: '75-150 mgc twice daily',
+          classification: 'Anti Hypertensive'
+        },
+        {
+          drugName: 'Metopolol',
+          dosage: '50-100 mg once daily',
+          classification: "Beta Blockers"
+        }
+      ];
+    }]);
