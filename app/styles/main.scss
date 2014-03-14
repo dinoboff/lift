@@ -10,6 +10,12 @@ $navbar-default-link-hover-color:          #bcbcbc;
 #main-container {
   padding-top: 20px;
 }
+
+@media (max-width: 768px) {
+  .gap {
+    margin-top: 10px;
+  }
+}
 @media (min-width: 768px) {
   .sidebar {
     position: fixed;

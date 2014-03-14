@@ -22,7 +22,7 @@ describe('Controller: NavCtrl', function() {
   it ('should provide a list of menu items with link to them', function() {
     var menu = scope.menu;
     expect(menu).toBeDefined();
-    expect(menu.length).toBe(5);
+    expect(menu.length).toBe(3);
     expect(scope.isActive('/')).toBe(true);
   });
 
