@@ -1,13 +1,14 @@
 'use strict';
 
-angular.module('liftApp', [
+var app = angular.module('liftApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'ngProgress'
 ])
-  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-    $routeProvider
+app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  $routeProvider
       .when('/', {
         templateUrl: 'partials/home',
         controller: 'HomeCtrl'
@@ -23,6 +24,18 @@ angular.module('liftApp', [
       .otherwise({
         redirectTo: '/'
       });
-      
-    $locationProvider.html5Mode(true);
-  }]);
+
+  $locationProvider.html5Mode(true);
+}]);
+
+app.run(['$rootScope','ngProgress',function($rootScope, ngProgress){
+  $rootScope.$on("$routeChangeStart", function() {
+    ngProgress.color("indigo");
+    ngProgress.start();
+
+  });
+  $rootScope.$on("$routeChangeSuccess", function() {
+    ngProgress.complete();
+  });
+
+}]);
