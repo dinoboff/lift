@@ -12,6 +12,10 @@ angular.module('liftApp')
           'link': '/medicine'
         },
         {
+          'title': 'History',
+          'link': '/history'
+        },
+        {
           'title': 'Test Results',
           'link': '/testResults'
         }
