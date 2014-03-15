@@ -45,6 +45,11 @@ module.exports = function (grunt) {
                 src: 'http://localhost:<%= express.options.port %>/testResults',
                 dest: 'testResults.jpg',
                 delay: 1000
+              },
+              {
+                src: 'http://localhost:<%= express.options.port %>/history',
+                dest: 'history.jpg',
+                delay: 1000
               }
             ]
           },
@@ -544,7 +549,7 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer',
       'express:dev',
-      //'open', //not working in nitrous evnironment
+      'open', //not working in nitrous evnironment
       'watch'
     ]);
   });

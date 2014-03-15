@@ -21,6 +21,10 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         templateUrl: 'partials/testResults.html',
         controller: 'TestResultsCtrl'
       })
+      .when('/history', {
+        templateUrl: 'partials/history',
+        controller: 'HistoryCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
