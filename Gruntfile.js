@@ -50,7 +50,12 @@ module.exports = function (grunt) {
                 src: 'http://localhost:<%= express.options.port %>/history',
                 dest: 'history.jpg',
                 delay: 1000
-              }
+              },
+              {
+                src: 'http://localhost:<%= express.options.port %>/meters',
+                dest: 'meters.jpg',
+                delay: 1000
+              },
             ]
           },
           local: false,
