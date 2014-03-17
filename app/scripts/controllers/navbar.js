@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('liftApp')
-    .controller('NavbarCtrl', ['$scope', '$location', '$http', function ($scope, $location, $http) {
+    .controller('NavbarCtrl', ['$scope', '$location', function ($scope, $location) {
       $scope.menu = [
         {
           'title': 'Overview',

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('liftApp')
-  .controller('MetersCtrl', function ($scope, $http) {
+    .controller('MetersCtrl', ['$scope', function ($scope) {
 
       $scope.events = [
         {
@@ -24,5 +24,5 @@ angular.module('liftApp')
           date: '11/15/2012 08:00AM',
           event: 'Metformin 50mg'
         }
-      ]
-  });
+      ];
+    }]);

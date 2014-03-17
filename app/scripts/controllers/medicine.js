@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('liftApp')
-    .controller('MedicineCtrl', ['$scope', '$http', function ($scope, $http) {
+    .controller('MedicineCtrl', ['$scope', function ($scope) {
       $scope.activeMedicines = [
         {
           drugName: 'Metformin',
@@ -21,7 +21,7 @@ angular.module('liftApp')
         {
           drugName: 'Metopolol',
           dosage: '50-100 mg once daily',
-          classification: "Beta Blockers"
+          classification: 'Beta Blockers'
         }
       ];
     }]);
