@@ -18,5 +18,7 @@ describe('Controller: MetersCtrl', function () {
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
+    expect(scope.events).toBeDefined();
+    expect(scope.events.length).toBe(5);
   });
 });
