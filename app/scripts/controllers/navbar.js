@@ -8,6 +8,10 @@ angular.module('liftApp')
           'link': '/'
         },
         {
+          'title': 'Health Meters',
+          'link': '/meters'
+        },
+        {
           'title': 'Medicine',
           'link': '/medicine'
         },
