@@ -43,12 +43,12 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 
 app.run(['$rootScope', 'ngProgress', function ($rootScope, ngProgress) {
   $rootScope.$on('$routeChangeStart', function () {
-    ngProgress.color('indigo');
-    ngProgress.start();
+//    ngProgress.color('indigo');
+//    ngProgress.start();
 
   });
   $rootScope.$on('$routeChangeSuccess', function () {
-    ngProgress.complete();
+//    ngProgress.complete();
   });
 
 }]);

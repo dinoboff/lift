@@ -22,6 +22,10 @@ angular.module('liftApp')
         {
           'title': 'Test Results',
           'link': '/testResults'
+        },
+        {
+          'title': 'Clinician',
+          'link': '/clinician'
         }
       ];
 
