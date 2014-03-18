@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('liftApp')
-  .controller('HistoryCtrl', function ($scope, $http) {
+  .controller('HistoryCtrl', ['$scope', function ($scope) {
       $scope.history = [
         {
           date: 'December 5, 2012 6:00 PM',
@@ -19,7 +19,6 @@ angular.module('liftApp')
         {
           date: 'November 5, 2012 6:00 PM',
           text: 'Physician prescribed the dosage of Amelodopine 2.5mg daily'
-        },
-
-      ]
-  });
+        }
+      ];
+    }]);

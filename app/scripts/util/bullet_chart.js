@@ -1,5 +1,1 @@
-(function($){
-  var options = {
-    series: { bullet: null}
-  }
-});
+'use strict';
