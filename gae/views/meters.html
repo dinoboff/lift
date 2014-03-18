@@ -1,4 +1,4 @@
-<div ng-include="'./views/navbar.html'"></div>
+<div ng-include="'lift/views/navbar.html'"></div>
 <div class="container-fluid" id="main-container">
   <div class="row">
     <div class="col-sm-3 col-md-2 sidebar">
@@ -14,12 +14,12 @@
           <a href="">Insights(1)</a>
         </div>
       </div>
-      <div class="row ">
+      <div class="row">
         <div class="col-sm-5">
-          <img src="holder.js/350x100/sky/text:Chart 1" holder-fix/>
+          <img src="holder.js/350x100/sky/text:Chart 1" holder-fix="">
         </div>
         <div class="col-sm-5 col-sm-offset-1">
-          <img src="holder.js/350x100/sky/text:Chart 2" holder-fix/>
+          <img src="holder.js/350x100/sky/text:Chart 2" holder-fix="">
         </div>
       </div>
 
@@ -55,7 +55,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="event in events">
-              <td><input type="checkbox"/></td>
+              <td><input type="checkbox"></td>
               <td>{{event.date}}</td>
               <td>{{event.event}}</td>
             </tr>
