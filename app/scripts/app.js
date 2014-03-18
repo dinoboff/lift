@@ -10,23 +10,23 @@ var app = angular.module('liftApp', [
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $routeProvider
       .when('/', {
-        templateUrl: 'partials/home',
+        templateUrl: 'views/home.html',
         controller: 'HomeCtrl'
       })
       .when('/medicine', {
-        templateUrl: 'partials/medicine',
+        templateUrl: 'views/medicine.html',
         controller: 'MedicineCtrl'
       })
       .when('/testResults', {
-        templateUrl: 'partials/testResults.html',
+        templateUrl: 'views/testResults.html',
         controller: 'TestResultsCtrl'
       })
       .when('/history', {
-        templateUrl: 'partials/history',
+        templateUrl: 'views/history.html',
         controller: 'HistoryCtrl'
       })
       .when('/meters', {
-        templateUrl: 'partials/meters',
+        templateUrl: 'views/meters.html',
         controller: 'MetersCtrl'
       })
       .otherwise({
