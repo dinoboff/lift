@@ -50,5 +50,43 @@ app.controller('ClinicianCtrl', ['$scope', function ($scope) {
 
   ];
 
+  $scope.prescriptionHistory = [
+    {
+      label:'Amlodopine 5mg Tablet',
+      qty:30,
+      dosage: '5mg OD',
+      classification: 'Calcium Antagonist',
+      pharmacy: 'Metro Drug'
+    },
+    {
+      label:'Catapres 0.1mg tablet',
+      qty:60,
+      dosage: '0.1mg bd',
+      classification: 'Anti Hypertensive',
+      pharmacy: 'Metro Drug'
+    },
+    {
+      label:'Metformin',
+      qty:60,
+      dosage: '500mg bd',
+      classification: 'Anti Diabetic Agent',
+      pharmacy: 'Metro Drug'
+    },
+    {
+      label:'Metapolol Tablet',
+      qty:30,
+      dosage: '50mg OD',
+      classification: 'Beta Blockers',
+      pharmacy: 'Metro Drug'
+    },
+    {
+      label:'Instamet',
+      qty:60,
+      dosage: '500mg',
+      classification: 'Anti Diabetic Agent',
+      pharmacy: 'Metro Drug'
+    },
+  ]
+
 
 }]);

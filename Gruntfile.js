@@ -7,11 +7,21 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var mountFolder = function (connect, dir) {
+  return connect.static(require('path').resolve(dir));
+};
+
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
+  var modRewrite = require('connect-modrewrite');
+  var yeomanConfig = {
+    app: require('./bower.json').appPath || 'app',
+    dist: 'dist'
+  };
 
   grunt.initConfig({
+
     yeoman: {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
@@ -62,7 +72,17 @@ module.exports = function (grunt) {
       options: {
         port: 8888,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost'
+        hostname: 'localhost',
+        livereload: 35729,
+        middleware: function(connect) {
+          return [
+            modRewrite([
+              '!(\\..+)$ / [L]'
+            ]),
+            mountFolder(connect, '.tmp'),
+            mountFolder(connect, yeomanConfig.app)
+          ];
+        }
       },
       livereload: {
         options: {
