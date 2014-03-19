@@ -3,6 +3,21 @@
 var app = angular.module('liftApp');
 
 app.controller('ClinicianCtrl', ['$scope', function ($scope) {
+
+  $scope.uiConfig = {
+    calendar: {
+      height: 450,
+      editable: true,
+      header: {
+        right: 'month,agendaWeek,agendaDay',
+        center: 'title',
+        left: 'prev,next today'
+      }
+    }
+  };
+
+  $scope.eventSources = [
+  ]
   $scope.patientInfo = [
     {
       type: 'chronic',
@@ -85,7 +100,7 @@ app.controller('ClinicianCtrl', ['$scope', function ($scope) {
       dosage: '500mg',
       classification: 'Anti Diabetic Agent',
       pharmacy: 'Metro Drug'
-    },
+    }
   ]
 
 

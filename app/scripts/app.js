@@ -5,7 +5,8 @@ var app = angular.module('liftApp', [
   'ngResource',
   'ngSanitize',
   'ngRoute',
-  'ngProgress'
+  'ngProgress',
+  'ui.calendar'
 ]);
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
