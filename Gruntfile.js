@@ -287,7 +287,7 @@ module.exports = function(grunt) {
   ]);
 
   /** Test tasks **/
-  // TODO: add 2e2 tasks
+  // TODO: add e2e tasks
   grunt.registerTask('test', ['jshint', 'karma:unit']);
   grunt.registerTask('autotest', ['jshint', 'karma:autoUnit']);
 
