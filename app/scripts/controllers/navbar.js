@@ -5,33 +5,34 @@ angular.module('liftApp')
       $scope.menu = [
         {
           'title': 'Overview',
-          'link': '/'
+          'link': '#/'
         },
         {
           'title': 'Health Meters',
-          'link': '/meters'
+          'link': '#/meters'
         },
         {
           'title': 'Medicine',
-          'link': '/medicine'
+          'link': '#/medicine'
         },
         {
           'title': 'History',
-          'link': '/history'
+          'link': '#/history'
         },
         {
           'title': 'Test Results',
-          'link': '/testResults'
+          'link': '#/testResults'
         },
         {
           'title': 'Clinician',
-          'link': '/clinician'
+          'link': '#/clinician'
         }
       ];
 
       $scope.isActive = function (route) {
         return route === $location.path();
       };
+
       $scope.users = [
         {
           name: 'Melba Brewster',
