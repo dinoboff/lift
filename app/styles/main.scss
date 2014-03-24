@@ -1,5 +1,5 @@
 $icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
-$font-family-base: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+$font-family-base: "Lato", "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 $navbar-default-bg: #5e87b0;
 $navbar-default-link-color: #fff;
 $navbar-default-link-active-color:         #fff;
@@ -342,4 +342,67 @@ $navbar-default-link-hover-color:          #bcbcbc;
 .table-striped > tbody > tr:nth-child(2n+1) > td,
 .table-striped > tbody > tr:nth-child(2n+1) > th {
   background-color: #f5f5f5;
+}
+
+
+.top-container {
+  padding-top: 40px;
+}
+
+.user-image {
+  width: 100px;
+  height: 100px;
+  border: 0;
+}
+
+.patient-panel {
+
+  background: #e4e7ea;
+  min-height: 800px;
+
+  .patient-item {
+    background: #fcfcfc;
+    font-weight: 400;
+    font-family: 'Lato';
+    padding: 20px;
+    font-size: 13px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    -moz-box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    box-shadow: 0 3px 0 rgba(12,12,12,0.03);
+    margin-bottom: 20px;
+  }
+
+  .media {
+    padding: 0;
+  }
+
+  .patient-name {
+    margin: 0 0 5px 0;
+    color: #428BCA;
+  }
+
+  .communication {
+    margin-top: 10px;
+    margin-bottom: 0;
+    list-style: none;
+    padding: 0;
+
+    li {
+      float: left;
+      margin-right: 5px;
+      margin-left: 5px;
+    }
+
+    a {
+      font-size: 16px;
+      border: 1px solid #ddd;
+      padding: 3px 5px;
+      width: 30px;
+      display: block;
+      text-align: center;
+      border-radius: 2px;
+      color: #666;
+    }
+  }
 }

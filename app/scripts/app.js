@@ -6,7 +6,8 @@ var app = angular.module('liftApp', [
   'ngSanitize',
   'ngRoute',
   'ngProgress',
-  'ui.calendar'
+  'ui.calendar',
+  'ui.bootstrap'
 ]);
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
@@ -35,21 +36,13 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
       templateUrl: 'views/clinician.html',
       controller: 'ClinicianCtrl'
     })
+    .when('/physician', {
+      templateUrl: 'views/physician.html',
+      controller: 'PhysicianCtrl'
+    })
     .otherwise({
       redirectTo: '/'
     });
 
-  // $locationProvider.html5Mode(true);
-}]);
-
-app.run(['$rootScope', 'ngProgress', function ($rootScope, ngProgress) {
-  $rootScope.$on('$routeChangeStart', function () {
-//    ngProgress.color('indigo');
-//    ngProgress.start();
-
-  });
-  $rootScope.$on('$routeChangeSuccess', function () {
-//    ngProgress.complete();
-  });
-
+  $locationProvider.html5Mode(true);
 }]);

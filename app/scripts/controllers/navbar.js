@@ -24,8 +24,8 @@ angular.module('liftApp')
           'link': '/testResults'
         },
         {
-          'title': 'Clinician',
-          'link': '/clinician'
+          'title': 'Physician',
+          'link': '/physician'
         }
       ];
 
