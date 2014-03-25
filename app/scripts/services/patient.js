@@ -3,24 +3,57 @@
 angular.module('liftApp')
     .service('PatientService', function () {
       var currentId = 2;
+      var BEFORE_FOOD = 0;
+      var AFTER_FOOD = 1;
       var patients = [
         {
           id: 1,
+          firstName: 'Patient',
+          lastName: 'One',
           name: 'Patient One',
           address: 'Address of the user',
           dateOfBirth: new Date(),
           gender: 'male',
           phoneNumber: '12345678901',
-          emailAddress: 'patient1@somewhere.com'
+          emailAddress: 'patient1@somewhere.com',
+          prescriptions: [
+            {
+              name: 'Amoxicillin',
+              type: 'tablet',
+              quantity: 60,
+              dose: 1,
+              schedule: [1,0,1],
+              date: new Date()
+            },
+            {
+              name: 'Doxycycline 100 mg',
+              type: 'capsule',
+              quantity: 60,
+              dose: 1,
+              schedule: [0,0,1],
+              date: new Date()
+            },
+            {
+              name: 'Monitor Glucose',
+              schedule: 8,
+              date: new Date()
+            },{
+              name: 'Monitor Blood Pressure',
+              schedule: 24,
+              date: new Date()
+            }
+          ]
         },
         {
           id: 2,
           name: 'Patient Two',
+          firstName: 'Patient',
+          lastName: 'Two',
           address: 'Address of the user',
           dateOfBirth: new Date(),
           gender: 'female',
           phoneNumber: '12345678901',
-          emailAddress: 'patient1@somewhere.com'
+          emailAddress: 'patient2@somewhere.com'
         }
       ];
 

@@ -18,7 +18,7 @@ app.controller('PhysicianCtrl', ['$scope','$modal', 'PatientService',function ($
     });
 
     $scope.modalInstance.result.then(function (item) {
-      var newPatient = {}
+      var newPatient = {};
       angular.extend(newPatient, item);
       newPatient.name = newPatient.firstName + " " + newPatient.lastName;
       PatientService.addPatient(newPatient);
@@ -28,7 +28,21 @@ app.controller('PhysicianCtrl', ['$scope','$modal', 'PatientService',function ($
       $scope.patient = PatientService.getDefaultPatient();
       $scope.canceled = true;
     })
-  }
+  };
+
+
+  $scope.openPrescriptionDialog = function(patientId) {
+    $scope.prescriptionDialogInstance = $modal.open({
+      templateUrl: 'views/prescriptions.html',
+      controller: 'PrescriptionInstanceController',
+      resolve: {
+        patient: function() {
+          return PatientService.getPatientById(patientId);
+        }
+      }
+    });
+  };
+
 }]);
 
 app.controller('AddPatientModalInstanceCtrl', ['$scope', '$modalInstance', '$filter', 'patient', function ($scope, $modalInstance, $filter, patient) {
@@ -48,6 +62,18 @@ app.controller('AddPatientModalInstanceCtrl', ['$scope', '$modalInstance', '$fil
     if (isValid) {
       $modalInstance.close($scope.patient);
     }
+  }
+
+}]);
+
+app.controller('PrescriptionInstanceController', ['$scope','$modalInstance','patient', function($scope, $modalInstance, patient){
+  $scope.patient = patient;
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.submit = function () {
+    $modalInstance.close($scope.patient);
   }
 
 }]);

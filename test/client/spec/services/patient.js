@@ -15,7 +15,7 @@ describe('Service: PatientService', function () {
     expect(!!PatientService).toBe(true);
   });
 
-  it('should get a patient based on the idea', function(){
+  it('should get a patient based on the id', function(){
     var id = 1;
     var patient = PatientService.getPatientById(id);
     expect(patient).toBeDefined();
