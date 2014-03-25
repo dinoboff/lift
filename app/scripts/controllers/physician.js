@@ -33,7 +33,6 @@ app.controller('PhysicianCtrl', ['$scope','$modal', 'PatientService',function ($
 
 app.controller('AddPatientModalInstanceCtrl', ['$scope', '$modalInstance', '$filter', 'patient', function ($scope, $modalInstance, $filter, patient) {
   $scope.patient = patient;
-  $scope.name = "Santosh";
 
   $scope.$watch('patient', function (newVal, oldVal) {
     if (newVal) {

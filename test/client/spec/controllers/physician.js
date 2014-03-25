@@ -68,7 +68,7 @@ describe('Controller: PhysicianCtrl', function () {
     scope.modalInstance.close(p);
     expect(scope.patients.length).toBe(3);
     expect(scope.patients[2].name).toBe('Test Patient');
-
+    expect(scope.patients[2].id).toBe(3);
   })
 
 

@@ -15,4 +15,11 @@ describe('Service: PatientService', function () {
     expect(!!PatientService).toBe(true);
   });
 
+  it('should get a patient based on the idea', function(){
+    var id = 1;
+    var patient = PatientService.getPatientById(id);
+    expect(patient).toBeDefined();
+    expect(patient.name).toBe('Patient One');
+  })
+
 });

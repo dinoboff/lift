@@ -2,8 +2,10 @@
 
 angular.module('liftApp')
     .service('PatientService', function () {
+      var currentId = 2;
       var patients = [
         {
+          id: 1,
           name: 'Patient One',
           address: 'Address of the user',
           dateOfBirth: new Date(),
@@ -12,6 +14,7 @@ angular.module('liftApp')
           emailAddress: 'patient1@somewhere.com'
         },
         {
+          id: 2,
           name: 'Patient Two',
           address: 'Address of the user',
           dateOfBirth: new Date(),
@@ -34,11 +37,22 @@ angular.module('liftApp')
         },
 
         addPatient: function (patient) {
+          patient.id = ++currentId;
           patients.push(patient);
         },
 
         getDefaultPatient: function () {
            return angular.extend({}, defaultPatient);
+        },
+
+        getPatientById: function(id) {
+          var patient = null;
+          angular.forEach(patients, function(p) {
+            if(p.id == id) {
+              patient = p;
+            }
+          });
+          return patient;
         }
       }
 
