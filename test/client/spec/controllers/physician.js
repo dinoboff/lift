@@ -6,7 +6,6 @@ describe('Controller: PhysicianCtrl', function () {
   beforeEach(module('liftApp'));
 
   var PhysicianCtrl,
-    $modal,
     scope;
 
   var fakeModalInstance = {
@@ -27,12 +26,14 @@ describe('Controller: PhysicianCtrl', function () {
   beforeEach(inject(function($modal) {
     spyOn($modal, 'open').andReturn(fakeModalInstance);
   }));
+
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _$modal_) {
+  beforeEach(inject(function ($controller, $rootScope, _$modal_, _PatientService_) {
     scope = $rootScope.$new();
     PhysicianCtrl = $controller('PhysicianCtrl', {
       $scope: scope,
-      $modal: _$modal_
+      $modal: _$modal_,
+      PatientService: _PatientService_
     });
   }));
 
@@ -61,7 +62,7 @@ describe('Controller: PhysicianCtrl', function () {
       gender: 'male',
       dateOfBirth: new Date(),
       phoneNumber: '1111',
-      email: 'san@san.com',
+      email: 'san@san.com'
     }
     scope.openDialog();
     scope.modalInstance.close(p);
