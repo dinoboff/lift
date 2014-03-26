@@ -16,4 +16,9 @@ describe('Filter: filters', function () {
     expect(filters(text)).toBe('every 8 hours');
   });
 
+  it('should return the proper humanized version of the schedule', function() {
+    var input = [1,1,1];
+    expect(filters(input)).toBe('thrice daily');
+  })
+
 });

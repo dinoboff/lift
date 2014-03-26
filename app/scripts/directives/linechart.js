@@ -20,3 +20,13 @@ app.directive('holderFix', function() {
     }
   };
 });
+
+
+app.directive('setFocus', function() {
+  return {
+    restrict: 'E',
+    link: function(scope, element) {
+      element[0].focus();
+    }
+  }
+})
