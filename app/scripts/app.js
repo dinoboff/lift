@@ -12,7 +12,7 @@ var app = angular.module('liftApp', [
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $routeProvider
-    .when('/', {
+    .when('/home', {
       templateUrl: 'views/home.html',
       controller: 'HomeCtrl'
     })
@@ -36,7 +36,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
       templateUrl: 'views/clinician.html',
       controller: 'ClinicianCtrl'
     })
-    .when('/physician', {
+    .when('/', {
       templateUrl: 'views/physician.html',
       controller: 'PhysicianCtrl'
     })
