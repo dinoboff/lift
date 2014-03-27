@@ -18,9 +18,10 @@ module.exports = function (config) {
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-route/angular-route.js',
       'app/bower_components/ngprogress/build/ngProgress.js',
+      'app/bower_components/angular-ui-calendar/src/calendar.js',
+      'app/bower_components/angular-bootstrap/ui-bootstrap.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
-      'test/client/mock/**/*.js',
       'test/client/spec/**/*.js'
     ],
 

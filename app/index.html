@@ -10,18 +10,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Lifeline Medical Systems</title>
+  <base href="/"/>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
-
-  <!-- build:css(app) styles/vendor.css -->
-    <!-- bower:css -->
-    <!-- endbower -->
-    <!-- endbuild -->
-    <!-- build:css({.tmp,app}) ./styles/main.css -->
+    <!-- build:css({.tmp,app}) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/fc.css">
     <!-- endbuild -->
 </head>
 
@@ -38,7 +35,7 @@
     <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-    <!-- build:js(app) ./scripts/vendor.js -->
+    <!-- build:js(app) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
@@ -51,7 +48,7 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:js(app) ./scripts/other.js -->
+    <!-- build:js(app) scripts/other.js -->
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/affix.js"></script>
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/alert.js"></script>
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/button.js"></script>
@@ -62,15 +59,24 @@
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/popover.js"></script>
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/scrollspy.js"></script>
-    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/scrollspy.js"></script>
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tab.js"></script>
     <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/transition.js"></script>
     <script src="bower_components/holderjs/holder.js"></script>
     <script src="bower_components/ngprogress/build/ngProgress.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js({.tmp,app}) ./scripts/scripts.js -->
+    <!-- build:js(app) scripts/calendar.js -->
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-calendar/src/calendar.js"></script>
+    <script type="text/javascript" src="bower_components/fullcalendar/fullcalendar.js"></script>
+    <script type="text/javascript" src="bower_components/fullcalendar/gcal.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/services/patient.js"></script>
     <script src="scripts/controllers/navbar.js"></script>
     <script src="scripts/controllers/home.js"></script>
     <script src="scripts/directives/linechart.js"></script>
@@ -79,6 +85,8 @@
     <script src="scripts/controllers/history.js"></script>
     <script src="scripts/controllers/meters.js"></script>
     <script src="scripts/controllers/clinician.js"></script>
+    <script src="scripts/controllers/physician.js"></script>
+    <script src="scripts/filters/filters.js"></script>
     <!-- endbuild -->
 </body>
 

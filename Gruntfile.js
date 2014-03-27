@@ -7,17 +7,85 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var mountFolder = function (connect, dir) {
+  return connect.static(require('path').resolve(dir));
+};
+
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
+  var modRewrite = require('connect-modrewrite');
+  var yeomanConfig = {
+    app: require('./bower.json').appPath || 'app',
+    dist: 'dist'
+  };
 
   grunt.initConfig({
+
     yeoman: {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
       dist: 'dist',
       gae: 'gae'
     },
+    autoshot: {
+      default_options: {
+        options: {
+          path: 'screenshots/',
+          remote: {
+            files: [
+              {
+                src: 'http://localhost:<%= connect.options.port %>/',
+                dest: 'mainpage.jpg',
+                delay: 1000
+              },
+              {
+                src: 'http://localhost:<%= connect.options.port %>/medicine',
+                dest: 'medicine.jpg',
+                delay: 1000
+              },
+              {
+                src: 'http://localhost:<%= connect.options.port %>/testResults',
+                dest: 'testResults.jpg',
+                delay: 1000
+              },
+              {
+                src: 'http://localhost:<%= connect.options.port %>/history',
+                dest: 'history.jpg',
+                delay: 1000
+              },
+              {
+                src: 'http://localhost:<%= connect.options.port %>/meters',
+                dest: 'meter.jpg',
+                delay: 1000
+              },
+              {
+                src: 'http://localhost:<%= connect.options.port %>/clinician',
+                dest: 'clinician.jpg',
+                delay: 1000
+              }
+            ]
+          },
+          local: false,
+          viewport: ['1024x655']
+        }
+      }
+    },
+    compress: {
+      screenshots: {
+        options: {
+          archive: 'screenshots/screenshots.zip'
+        },
+        files: [
+          {
+            expand: true,
+            src: ['screenshots/*.jpg'],
+            dest: '/'
+          }
+        ]
+      }
+    },
+
     watch: {
       coffee: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -50,19 +118,31 @@ module.exports = function (grunt) {
     autoprefixer: {
       options: ['last 1 version'],
       dist: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/styles/',
-          src: '{,*/}*.css',
-          dest: '.tmp/styles/'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: '.tmp/styles/',
+            src: '{,*/}*.css',
+            dest: '.tmp/styles/'
+          }
+        ]
       }
     },
     connect: {
       options: {
         port: 8888,
         // Change this to '0.0.0.0' to access the server from outside.
-        hostname: 'localhost'
+        hostname: 'localhost',
+        livereload: 35729,
+        middleware: function (connect) {
+          return [
+            modRewrite([
+              '!(\\..+)$ / [L]'
+            ]),
+            mountFolder(connect, '.tmp'),
+            mountFolder(connect, yeomanConfig.app)
+          ];
+        }
       },
       livereload: {
         options: {
@@ -71,6 +151,11 @@ module.exports = function (grunt) {
             '.tmp',
             '<%= yeoman.app %>'
           ]
+        }
+      },
+      dev: {
+        options: {
+          base: '<%= yeoman.dist %>'
         }
       },
       test: {
@@ -91,24 +176,28 @@ module.exports = function (grunt) {
     },
     clean: {
       dist: {
-        files: [{
-          dot: true,
-          src: [
-            '.tmp',
-            '<%= yeoman.dist %>/*',
-            '!<%= yeoman.dist %>/.git*'
-          ]
-        }]
+        files: [
+          {
+            dot: true,
+            src: [
+              '.tmp',
+              '<%= yeoman.dist %>/*',
+              '!<%= yeoman.dist %>/.git*'
+            ]
+          }
+        ]
       },
       gae: {
-        files: [{
-          dot: true,
-          src: [
-            '.tmp',
-            '<%= yeoman.gae %>/*',
-            '!<%= yeoman.gae %>/.git*'
-          ]
-        }]
+        files: [
+          {
+            dot: true,
+            src: [
+              '.tmp',
+              '<%= yeoman.gae %>/*',
+              '!<%= yeoman.gae %>/.git*'
+            ]
+          }
+        ]
       },
       server: '.tmp'
     },
@@ -128,22 +217,26 @@ module.exports = function (grunt) {
         sourceRoot: ''
       },
       dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/scripts',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/scripts',
-          ext: '.js'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/scripts',
+            src: '{,*/}*.coffee',
+            dest: '.tmp/scripts',
+            ext: '.js'
+          }
+        ]
       },
       test: {
-        files: [{
-          expand: true,
-          cwd: 'test/spec',
-          src: '{,*/}*.coffee',
-          dest: '.tmp/spec',
-          ext: '.js'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: 'test/spec',
+            src: '{,*/}*.coffee',
+            dest: '.tmp/spec',
+            ext: '.js'
+          }
+        ]
       }
     },
     compass: {
@@ -170,8 +263,8 @@ module.exports = function (grunt) {
     // not used since Uglify task does concat,
     // but still available if needed
     /*concat: {
-      dist: {}
-    },*/
+     dist: {}
+     },*/
     rev: {
       dist: {
         files: {
@@ -199,22 +292,26 @@ module.exports = function (grunt) {
     },
     imagemin: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg}',
-          dest: '<%= yeoman.dist %>/images'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/images',
+            src: '{,*/}*.{png,jpg,jpeg}',
+            dest: '<%= yeoman.dist %>/images'
+          }
+        ]
       }
     },
     svgmin: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/images',
+            src: '{,*/}*.svg',
+            dest: '<%= yeoman.dist %>/images'
+          }
+        ]
       }
     },
     cssmin: {
@@ -234,32 +331,35 @@ module.exports = function (grunt) {
       dist: {
         options: {
           /*removeCommentsFromCDATA: true,
-          // https://github.com/yeoman/grunt-usemin/issues/44
-          //collapseWhitespace: true,
-          collapseBooleanAttributes: true,
-          removeAttributeQuotes: true,
-          removeRedundantAttributes: true,
-          useShortDoctype: true,
-          removeEmptyAttributes: true,
-          removeOptionalTags: true*/
+           // https://github.com/yeoman/grunt-usemin/issues/44
+           //collapseWhitespace: true,
+           collapseBooleanAttributes: true,
+           removeAttributeQuotes: true,
+           removeRedundantAttributes: true,
+           useShortDoctype: true,
+           removeEmptyAttributes: true,
+           removeOptionalTags: true*/
         },
-        files: [{
-          expand: true,
-          cwd: '<%= yeoman.app %>',
-          src: ['*.html', 'views/*.html'],
-          dest: '<%= yeoman.dist %>'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>',
+            src: ['*.html', 'views/*.html'],
+            dest: '<%= yeoman.dist %>'
+          }
+        ]
       }
     },
     // Put files not handled in other tasks here
     copy: {
       gae: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.dist %>',
-          dest: '<%= yeoman.gae %>',
-          src: [
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.dist %>',
+            dest: '<%= yeoman.gae %>',
+            src: [
               '*.{html,ico,txt}',
               '.htaccess',
               'images/{,*/}*',
@@ -267,36 +367,41 @@ module.exports = function (grunt) {
               'styles/{,*/}*',
               'views/{,*/}*',
               'fonts/*'
-          ]
-        }]
+            ]
+          }
+        ]
       },
       dist: {
-        files: [{
-          expand: true,
-          dot: true,
-          cwd: '<%= yeoman.app %>',
-          dest: '<%= yeoman.dist %>',
-          src: [
-            '*.{ico,png,txt}',
-            '.htaccess',
-            'images/{,*/}*.{gif,webp}',
-            'fonts/*'
-          ]
-        }, {
-          expand: true,
-          cwd: '.tmp/images',
-          dest: '<%= yeoman.dist %>/images',
-          src: [
-            'generated/*'
-          ]
-        },{
-          expand: true,
-          cwd: '<%= yeoman.app %>/bower_components/font-awesome',
-          dest: '<%= yeoman.dist %>',
-          src: [
-            'fonts/*'
-          ]
-        }]
+        files: [
+          {
+            expand: true,
+            dot: true,
+            cwd: '<%= yeoman.app %>',
+            dest: '<%= yeoman.dist %>',
+            src: [
+              '*.{ico,png,txt}',
+              '.htaccess',
+              'images/{,*/}*.{gif,webp}',
+              'fonts/*'
+            ]
+          },
+          {
+            expand: true,
+            cwd: '.tmp/images',
+            dest: '<%= yeoman.dist %>/images',
+            src: [
+              'generated/*'
+            ]
+          },
+          {
+            expand: true,
+            cwd: '<%= yeoman.app %>/bower_components/font-awesome',
+            dest: '<%= yeoman.dist %>',
+            src: [
+              'fonts/*'
+            ]
+          }
+        ]
       },
       styles: {
         expand: true,
@@ -336,12 +441,14 @@ module.exports = function (grunt) {
     },
     ngmin: {
       dist: {
-        files: [{
-          expand: true,
-          cwd: '.tmp/concat/scripts',
-          src: '*.js',
-          dest: '.tmp/concat/scripts'
-        }]
+        files: [
+          {
+            expand: true,
+            cwd: '.tmp/concat/scripts',
+            src: '*.js',
+            dest: '.tmp/concat/scripts'
+          }
+        ]
       }
     },
     uglify: {
@@ -413,5 +520,12 @@ module.exports = function (grunt) {
     'jshint',
     'test',
     'build'
+  ]);
+
+  grunt.registerTask('screenshots',[
+    'concurrent:server',
+    'connect:dev',
+    'autoshot',
+    'compress'
   ]);
 };
