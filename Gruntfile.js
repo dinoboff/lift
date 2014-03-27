@@ -15,6 +15,8 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
   require('time-grunt')(grunt);
   var modRewrite = require('connect-modrewrite');
+  grunt.loadNpmTasks('grunt-string-replace');
+
   var yeomanConfig = {
     app: require('./bower.json').appPath || 'app',
     dist: 'dist'
@@ -85,7 +87,6 @@ module.exports = function (grunt) {
         ]
       }
     },
-
     watch: {
       coffee: {
         files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
@@ -459,6 +460,24 @@ module.exports = function (grunt) {
           ]
         }
       }
+    },
+    'string-replace': {
+      dist: {
+        files: [
+          {
+            expand: true,
+            cwd: 'dist',
+            src: 'index.html',
+            dest: 'gae'
+          }
+        ],
+        options:{
+          replacements:[{
+            pattern: 'base href="/"',
+            replacement: 'base href="/lift/"'
+          }]
+        }
+      }
     }
   });
 
@@ -511,9 +530,10 @@ module.exports = function (grunt) {
     'cdnify',
     'cssmin',
     'uglify',
-    'rev',
+//    'rev',
     'usemin',
-    'copy:gae'
+    'copy:gae',
+    'string-replace:dist'
   ]);
 
   grunt.registerTask('default', [
