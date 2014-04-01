@@ -44,15 +44,15 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
       templateUrl: 'views/patients.html',
       controller: 'PatientsCtrl',
       resolve: {
-        selectedPatient: function($route, PatientService) {
+        selectedPatient: ['$route', 'PatientService', function($route, PatientService) {
           var patientId = $route.current.params.patient_id
           return PatientService.getPatientById(patientId);
-        }
+        }]
       }
     })
     .otherwise({
       redirectTo: '/'
     });
 
-  $locationProvider.html5Mode(true);
+//  $locationProvider.html5Mode(true);
 }]);

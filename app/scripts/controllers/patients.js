@@ -10,7 +10,7 @@ angular.module('liftApp')
       var buildAllPrescriptions = function() {
         var result = {};
         var today = new Date();
-        var yesterday = new Date()
+        var yesterday = new Date();
         yesterday.setDate(yesterday.getDate()-1);
         var yString = $scope.dateStr = $filter('date')(yesterday, "yyyyMMdd");
         var tString = $scope.dateStr = $filter('date')(today, "yyyyMMdd");
