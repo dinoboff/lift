@@ -1,6 +1,17 @@
 <header class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="">Lifeline Medical Systems</a>
+
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav hidden-xs pull-right">
+        <li class="item">
+          <a href="/#/patients/1/">Login as Patient 1</a>
+        </li>
+        <li class="item">
+          <a href="/#/patients/2/">Login as Patient 2</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </header>
 <section id="physician" class="patient-panel">
@@ -39,7 +50,8 @@
                   </li>
                   <li>
                     <a href="" class="tooltips" data-toggle="tooltip" data-placement="top" title
-                       data-original-title="Check Prescriptions" ng-click="openPrescriptionDialog(patient.id)"><i class="fa fa-list"></i></a>
+                       data-original-title="Check Prescriptions" ng-click="openPrescriptionDialog(patient.id)"><i
+                            class="fa fa-list"></i></a>
                   </li>
                 </ul>
               </div>
