@@ -36,7 +36,6 @@ angular.module('liftApp')
           }
 
         }
-        console.log(p);
         return p;
       }
 
