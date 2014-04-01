@@ -40,6 +40,16 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
       templateUrl: 'views/physician.html',
       controller: 'PhysicianCtrl'
     })
+    .when('/patients/:patient_id', {
+      templateUrl: 'views/patients.html',
+      controller: 'PatientsCtrl',
+      resolve: {
+        selectedPatient: function($route, PatientService) {
+          var patientId = $route.current.params.patient_id
+          return PatientService.getPatientById(patientId);
+        }
+      }
+    })
     .otherwise({
       redirectTo: '/'
     });
