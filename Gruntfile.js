@@ -16,7 +16,6 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   var modRewrite = require('connect-modrewrite');
   grunt.loadNpmTasks('grunt-string-replace');
-  grunt.loadNpmTasks('grunt-connect-proxy');
 
   var yeomanConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -30,20 +29,6 @@ module.exports = function (grunt) {
       app: require('./bower.json').appPath || 'app',
       dist: 'dist',
       gae: 'gae'
-    },
-    express: {
-      options: {
-        background: true,
-        port: 3000,
-        output: ".+",
-        debug: false
-      },
-      dev: {
-        options: {
-          script: '<%= yeoman.app %>/api/server.js',
-          node_env: 'production'
-        }
-      }
     },
     autoshot: {
       default_options: {
@@ -127,7 +112,6 @@ module.exports = function (grunt) {
           '<%= yeoman.app %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
           '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
-          '{.tmp,<%= yeoman.app %>}/api/{,*/}*.js',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -155,36 +139,11 @@ module.exports = function (grunt) {
       livereload: {
         options: {
           open: true,
-          middleware: function (connect, options) {
-            var middlewares = [];
-            var directory = options.directory || options.base[options.base.length - 1];
-            if (!Array.isArray(options.base)) {
-              options.base = [options.base];
-            }
-            // Setup the proxy
-            middlewares.push(require('grunt-connect-proxy/lib/utils').proxyRequest);
-
-            options.base.forEach(function (base) {
-              // Serve static files.
-              middlewares.push(connect.static(base));
-            });
-
-            // Make directory browse-able.
-            middlewares.push(connect.directory(directory));
-            console.log(middlewares);
-            return middlewares;
-          },
           base: [
             '.tmp',
             '<%= yeoman.app %>'
           ]
-        },
-        proxies: [{
-          context: '/api/v1',
-          host: '0.0.0.0',
-          port: 3000
         }
-        ],
       },
       dev: {
         options: {
@@ -525,8 +484,6 @@ module.exports = function (grunt) {
       'concurrent:server',
       'autoprefixer',
       'connect:livereload',
-      'configureProxies:livereload',
-      'express:dev',
       'watch'
     ]);
   });
