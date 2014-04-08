@@ -1,10 +1,26 @@
 'use strict';
 
+var interceptor = function(data, operation, what) {
+  var resp;
+
+  if (operation === 'getList') {
+    resp = data[what] ? data[what] : [];
+    resp.cursor = data.cursor ? data.cursor : null;
+  } else {
+    resp = data;
+  }
+  return resp;
+};
+
 angular.module('liftApp')
-    .service('PatientService', function () {
+    .service('PatientAPI', ['Restangular', 'API_BASE_URL', function(Restangular, API_BASE_URL){
+      return Restangular.withConfig(function(RestangularConfigurer) {
+        RestangularConfigurer.setBaseUrl(API_BASE_URL);
+        RestangularConfigurer.addResponseInterceptor(interceptor);
+      });
+    }])
+    .service('PatientService', ['PatientAPI', function (PatientAPI) {
       var currentId = 2;
-      var BEFORE_FOOD = 0;
-      var AFTER_FOOD = 1;
       var patients = [
         {
           id: 1,
@@ -138,7 +154,8 @@ angular.module('liftApp')
 
       return {
         getPatients: function () {
-          return patients;
+
+          return PatientAPI.all('patients').getList();
         },
 
         addPatient: function (patient) {
@@ -168,4 +185,4 @@ angular.module('liftApp')
         }
       }
 
-    });
+    }]);

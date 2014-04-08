@@ -3,7 +3,8 @@
 var app = angular.module('liftApp');
 app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function ($scope, $modal, PatientService) {
 
-  $scope.patients = PatientService.getPatients();
+  $scope.patients = PatientService.getPatients().$object;
+
   $scope.patient = PatientService.getDefaultPatient();
 
   $scope.openDialog = function () {
