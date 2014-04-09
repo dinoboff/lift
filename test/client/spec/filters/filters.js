@@ -3,7 +3,7 @@
 describe('Filter: filters', function () {
 
   // load the filter's module
-  beforeEach(module('liftApp'));
+  beforeEach(module('liftApp.mocked'));
 
   // initialize a new instance of the filter before each test
   var filters;

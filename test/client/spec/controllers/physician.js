@@ -3,7 +3,7 @@
 describe('Controller: PhysicianCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('liftApp'));
+  beforeEach(module('liftApp.mocked'));
 
   var PhysicianCtrl,
     scope;

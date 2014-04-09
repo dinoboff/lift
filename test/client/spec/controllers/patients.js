@@ -3,7 +3,7 @@
 describe('Controller: PatientsCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('liftApp'));
+  beforeEach(module('liftApp.mocked'));
 
   var selPatient =
   {
