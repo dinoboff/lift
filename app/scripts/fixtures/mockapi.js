@@ -102,6 +102,16 @@ app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', '$log', function($h
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   }
 
+  function findPatientById(id) {
+    var result = null;
+    angular.forEach(patientList.data.patients, function(patient) {
+      if(patient.id == id) {
+        result = patient;
+      }
+    });
+    return result;
+  }
+
   //When backend receives a request to the views folder, pass it through
   $httpBackend.whenGET( new RegExp( regEsc( Config.viewDir ) ) ).passThrough();
 
@@ -109,10 +119,40 @@ app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', '$log', function($h
     return [200, patientList.data];
   });
 
-  $httpBackend.whenGET(/^api\/v1\/patients\/\d+/).respond(function(method,url) {
-    console.log("Check", patientList.data);
-    return [200, patientList.data.patients[0]]
+  $httpBackend.whenGET(/^api\/v1\/patients\/(\d+)/).respond(function(method,url) {
+    var regex = /^api\/v1\/patients\/(\d+)/;
+    var match = regex.exec(url);
+    var id = match[1];
+
+    var result = findPatientById(id);
+    return [200, result]
   });
+
+  $httpBackend.whenPOST("api/v1/patients").respond(function(method, url, data) {
+    console.log(""+data);
+    var patient = JSON.parse(data);
+    patient.id = patientList.data.patients.length;
+    console.log(patient);
+    patientList.data.patients.push(patient);
+    return [200, data]
+  });
+
+  $httpBackend.whenPOST(/^api\/v1\/patients\/(\d+)\/medication/).respond(function(method, url, data) {
+    console.log(data);
+    var regex = /^api\/v1\/patients\/(\d+)\/medication/;
+    var match = regex.exec(url);
+    var id = match[1];
+    var patient = findPatientById(id);
+
+    var medication = JSON.parse(data);
+    console.log(medication);
+    if (patient) {
+      patient.prescriptions = patient.prescriptions || [];
+      patient.prescriptions.push(medication);
+    }
+    return [200, patient]
+  });
+
 
 
 }]);
@@ -132,9 +172,9 @@ app.config(['$httpProvider', 'Config',function ($httpProvider, Config) {
         if(response.config.url.indexOf(Config.view_dir) == 0) return response; //Let through views immideately
 
         //Fake delay on response from APIs and other urls
-        $log.log('Delaying response with ' + Config.fakeDelay + 'ms');
+//        $log.log('Delaying response with ' + Config.fakeDelay + 'ms');
         $timeout(function () {
-          $log.log("Returning... ", response);
+//          $log.log("Returning... ", response);
           deferred.resolve(response);
         }, Config.fakeDelay);
 

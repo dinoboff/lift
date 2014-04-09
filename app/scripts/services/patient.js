@@ -29,8 +29,11 @@ app.service('PatientService', ['PatientAPI', function (PatientAPI) {
     },
 
     addPatient: function (patient) {
-      patient.id = ++currentId;
-      patients.push(patient);
+      return PatientAPI.all('patients').post(patient);
+    },
+
+    addMedication: function (id, medication) {
+      return PatientAPI.one('patients', id).all('medication').post(medication);
     },
 
     getPatientById: function (id) {

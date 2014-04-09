@@ -32,8 +32,8 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
       newPatient.name = newPatient.firstName + " " + newPatient.lastName;
       PatientService.addPatient(newPatient);
       $scope.patient = defaultPatient;
+      $scope.patients = PatientService.getPatients().$object;
     }, function () {
-      console.log('Modal dismissed at: ' + new Date());
       $scope.patient = defaultPatient;
       $scope.canceled = true;
     })
@@ -51,7 +51,17 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
         }
       }
     });
+
+    $scope.prescriptionDialogInstance.result.then(function (item) {
+      $scope.patient = defaultPatient;
+      $scope.patients = PatientService.getPatients().$object;
+    }, function () {
+      $scope.patient = defaultPatient;
+      $scope.canceled = true;
+    });
+
   };
+
 
 }]);
 
@@ -76,7 +86,7 @@ app.controller('AddPatientModalInstanceCtrl', ['$scope', '$modalInstance', '$fil
 
 }]);
 
-app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'patient', function ($scope, $modalInstance, patient) {
+app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'patient', 'PatientService', function ($scope, $modalInstance, patient, PatientService) {
   $scope.patient = patient;
   var schedules = [
     'None',
@@ -113,8 +123,10 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
       var schedule = schedules[$scope.medication.sched];
       $scope.medication.schedule = schedule;
       $scope.medication.date = new Date();
-      $scope.patient.prescriptions.push($scope.medication);
-      $scope.medication = angular.extend({}, defaultMedication);
+      PatientService.addMedication(patient.id, $scope.medication).then(function() {
+        $scope.patient.prescriptions.push($scope.medication);
+      });
+
     }
   }
 
