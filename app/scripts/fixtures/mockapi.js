@@ -1,6 +1,9 @@
 
 
-var app = angular.module('liftApp.mocked');
+'use strict';
+
+
+var app = angular.module('liftApp.mocked', ['restangular','ngMockE2E', 'liftApp']);
 
 
 app.constant('Config', {
@@ -12,7 +15,7 @@ app.constant('Config', {
 app.constant('PATIENTS', {
   data: {
     patients: [
-      {
+    {
         id: 1,
         firstName: 'Patient',
         lastName: 'One',
@@ -93,6 +96,7 @@ app.constant('PATIENTS', {
 
 app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', '$log', function($httpBackend, API_BASE_URL,Config, PATIENTS, $log){
 
+
   var patientList = PATIENTS;
   function regEsc(str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
@@ -103,6 +107,11 @@ app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', '$log', function($h
 
   $httpBackend.whenGET('api/v1/patients').respond(function(method, url) {
     return [200, patientList.data];
+  });
+
+  $httpBackend.whenGET(/^api\/v1\/patients\/\d+/).respond(function(method,url) {
+    console.log("Check", patientList.data);
+    return [200, patientList.data.patients[0]]
   });
 
 

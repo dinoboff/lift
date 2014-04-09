@@ -3,9 +3,17 @@
 var app = angular.module('liftApp');
 app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function ($scope, $modal, PatientService) {
 
+  var defaultDate = new Date();
+  defaultDate.setMonth(defaultDate.getMonth() - 12);
+
+  var defaultPatient = {
+    gender: 'male',
+    dateOfBirth: defaultDate
+  };
+
   $scope.patients = PatientService.getPatients().$object;
 
-  $scope.patient = PatientService.getDefaultPatient();
+  $scope.patient = defaultPatient;
 
   $scope.openDialog = function () {
     $scope.modalInstance = $modal.open({
@@ -23,10 +31,10 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
       angular.extend(newPatient, item);
       newPatient.name = newPatient.firstName + " " + newPatient.lastName;
       PatientService.addPatient(newPatient);
-      $scope.patient = PatientService.getDefaultPatient();
+      $scope.patient = defaultPatient;
     }, function () {
       console.log('Modal dismissed at: ' + new Date());
-      $scope.patient = PatientService.getDefaultPatient();
+      $scope.patient = defaultPatient;
       $scope.canceled = true;
     })
   };
@@ -81,13 +89,13 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
     8,
     12,
     24
-  ]
+  ];
   var defaultMedication = {
     dose: 1,
     sched: 2,
     type: 'tablet',
     name: ''
-  }
+  };
 
   $scope.medication = angular.extend({}, defaultMedication);
 
@@ -97,13 +105,13 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
 
   $scope.submit = function () {
     $modalInstance.close($scope.patient);
-  }
+  };
 
   $scope.addMedication = function (isValid) {
     if (isValid) {
       $scope.patient.prescriptions = $scope.patient.prescriptions || [];
       var schedule = schedules[$scope.medication.sched];
-      $scope.medication.schedule = schedule
+      $scope.medication.schedule = schedule;
       $scope.medication.date = new Date();
       $scope.patient.prescriptions.push($scope.medication);
       $scope.medication = angular.extend({}, defaultMedication);

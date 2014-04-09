@@ -6,8 +6,7 @@ describe('Controller: ClinicianCtrl', function () {
   beforeEach(module('liftApp.mocked'));
 
   var ClinicianCtrl,
-    scope,
-    $httpBackend;
+    scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {

@@ -20,6 +20,8 @@ module.exports = function (config) {
       'app/bower_components/ngprogress/build/ngProgress.js',
       'app/bower_components/angular-ui-calendar/src/calendar.js',
       'app/bower_components/angular-bootstrap/ui-bootstrap.js',
+      'app/bower_components/restangular/dist/restangular.js',
+      'app/bower_components/lodash/dist/lodash.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/client/spec/**/*.js'
