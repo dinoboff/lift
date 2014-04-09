@@ -7,8 +7,11 @@ var app = angular.module('liftApp', [
   'ngRoute',
   'ngProgress',
   'ui.calendar',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'restangular'
 ]);
+
+app.constant('API_BASE_URL', 'api/v1');
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $routeProvider

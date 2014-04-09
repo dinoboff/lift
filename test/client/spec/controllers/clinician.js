@@ -3,11 +3,10 @@
 describe('Controller: ClinicianCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('liftApp'));
+  beforeEach(module('liftApp.mocked'));
 
   var ClinicianCtrl,
-    scope,
-    $httpBackend;
+    scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function (_$httpBackend_, $controller, $rootScope) {
