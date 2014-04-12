@@ -17,7 +17,7 @@ app.controller('ClinicianCtrl', ['$scope', function ($scope) {
   };
 
   $scope.eventSources = [
-  ]
+  ];
   $scope.patientInfo = [
     {
       type: 'chronic',
