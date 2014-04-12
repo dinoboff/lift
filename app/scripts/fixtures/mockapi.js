@@ -94,7 +94,7 @@ app.constant('PATIENTS', {
 
 
 
-app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', '$log', function($httpBackend, API_BASE_URL,Config, PATIENTS, $log){
+app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', function($httpBackend, API_BASE_URL,Config, PATIENTS){
 
 
   var patientList = PATIENTS;
@@ -112,7 +112,6 @@ app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', '$log', function($h
     return result;
   }
 
-  //When backend receives a request to the views folder, pass it through
   $httpBackend.whenGET( new RegExp( regEsc( Config.viewDir ) ) ).passThrough();
 
   $httpBackend.whenGET('api/v1/patients').respond(function(method, url) {
@@ -172,9 +171,7 @@ app.config(['$httpProvider', 'Config',function ($httpProvider, Config) {
         if(response.config.url.indexOf(Config.view_dir) == 0) return response; //Let through views immideately
 
         //Fake delay on response from APIs and other urls
-//        $log.log('Delaying response with ' + Config.fakeDelay + 'ms');
         $timeout(function () {
-//          $log.log("Returning... ", response);
           deferred.resolve(response);
         }, Config.fakeDelay);
 

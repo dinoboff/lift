@@ -272,11 +272,11 @@ module.exports = function (grunt) {
     useminPrepare: {
       html: '<%= yeoman.app %>/index.html',
       options: {
-        dest: '<%= yeoman.dist %>'
+        dest: '<%= yeoman.dist %>',
       }
     },
     usemin: {
-      html: ['<%= yeoman.dist %>/{,*/}*.html'],
+      html: ['<%= yeoman.dist %>/{,*/}*.html','<%= yeoman.dist %>/{,*/}*.html'],
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       options: {
         assetsDirs: ['<%= yeoman.dist %>']
@@ -336,7 +336,7 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: '<%= yeoman.app %>',
-            src: ['*.html', 'views/*.html'],
+            src: ['*.html', 'views/*.html', 'views/charts/*.html'],
             dest: '<%= yeoman.dist %>'
           }
         ]
@@ -447,7 +447,6 @@ module.exports = function (grunt) {
       dist: {
         files: {
           '<%= yeoman.dist %>/scripts/scripts.js': [
-            '<%= yeoman.dist %>/scripts/scripts.js'
           ]
         }
       }
