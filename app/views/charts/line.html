@@ -1,0 +1,34 @@
+<svg ng-attr-width="{{totalWidth}}" ng-attr-height="{{totalHeight}}">
+  <rect x="0" y="0" ng-attr-width="{{totalWidth}}" ng-attr-height="{{totalHeight}}" class="canvas"></rect>
+  <g class="chart-container" transform="translate({{layout.left}},{{layout.top}})">
+    <rect x="0" y="0" ng-attr-width="{{graph.width}}" ng-attr-height="{{graph.height}}" class="chart-area"></rect>
+    <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{glucoseMean}}" ng-attr-y2="{{glucoseMean}}" class="glucose-mean" stroke-dasharray="5,5"></line>
+    <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{tempMean}}" ng-attr-y2="{{tempMean}}" class="temp-mean" stroke-dasharray="5,5"></line>
+
+    <text x="30" ng-attr-y="{{glucoseMean - 10}}" dy=".32em" style="text-anchor: start;fill:steelblue" >{{meanGlucose|number:2}}</text>
+    <text x="30" ng-attr-y="{{tempMean - 10}}" dy=".32em" style="text-anchor: start;fill:red" >{{meanTemp|number:2}}° C</text>
+
+    <g class="glucose">
+      <path ng-attr-d="{{line1Path}}" class="glucose"></path>
+      <circle ng-attr-cx="{{c.cx}}" ng-attr-cy="{{c.cy}}" r="4" ng-repeat="c in glCircles" class="data-circle-glucose"></circle>
+    </g>
+    <g class="temp">
+      <path ng-attr-d="{{line2Path}}" class="temp"></path>
+      <circle ng-attr-cx="{{c.cx}}" ng-attr-cy="{{c.cy}}" r="4" ng-repeat="c in tempCircles"></circle>
+    </g>
+    <g class="medicines">
+      <g class="medicine" ng-attr-transform="translate(0, {{(graph.height - 50 * $index)*1}})" ng-repeat="medicine in medData">
+        <text x="10" y="0" dy=".32em" style="text-anchor: start;">{{medicine.name}}</text>
+        <circle ng-attr-cx="{{med.cx}}" cy="20" r="5" class="medicine {{med.className}}" ng-repeat="med in medicine.data" ></circle>
+      </g>
+    </g>
+
+    <g class="legend">
+      <circle ng-attr-cx="{{graph.width-60}}" cy="-20" r="5" class="glucosec"></circle>
+      <circle ng-attr-cx="{{graph.width-190}}" cy="-20" r="5" class="tempc"></circle>
+      <text ng-attr-x="{{graph.width}}" y="-20" dy=".32em" style="text-anchor: end;" class="glucose">Glucose</text>
+      <text ng-attr-x="{{graph.width-100}}" y="-20" dy=".32em" style="text-anchor: end;" class="temp">Temperature</text>
+    </g>
+
+  </g>
+</svg>

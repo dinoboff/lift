@@ -412,3 +412,120 @@ $navbar-default-link-hover-color:          #bcbcbc;
     width: 700px;
   }
 }
+
+svg {
+  .canvas {
+    fill: rgba(255,255,255,1);
+    stroke: #000;
+    stroke-width: 1;
+  }
+
+  .chart-area {
+    fill: #fff;
+
+  }
+
+  .axis {
+    stroke: #000;
+    stroke-width: 1;
+  }
+
+  .glucose {
+    stroke: steelblue;
+    stroke-width: 1;
+    fill: none;
+  }
+
+  .temp {
+    stroke: #ff0000;
+    fill: none;
+  }
+
+  .axis {
+    shape-rendering: crispEdges;
+  }
+
+  .x.axis line {
+    stroke: lightgrey;
+  }
+
+  .x.axis .minor {
+    stroke-opacity: .5;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+
+  .x.axis text {
+    font-size: 8pt;
+  }
+
+  .y.axis line, .y.axis path {
+    fill: none;
+    stroke: #000;
+  }
+
+  .y.axis text {
+    font-size: 8pt;
+  }
+
+  .y.axisRight text {
+    fill: orange;
+  }
+
+  .y.axisLeft text {
+    fill: steelblue;
+  }
+
+  .glucose {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1;
+  }
+
+  .temp {
+    fill: none;
+    stroke: red;
+    stroke-width: 1;
+  }
+
+  .glucosec {
+    fill: steelblue;
+    stroke: black;
+    stroke-width: 1;
+  }
+
+  .tempc {
+    fill: red;
+    stroke: black;
+    stroke-width: 1;
+  }
+
+  .taken {
+    fill: steelblue;
+    stroke: black;
+    stroke-width: 1;
+  }
+
+  .not-taken {
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+  }
+
+  .temp-mean {
+    stroke: red;
+    stroke-dasharray : "4,4";
+    stroke-opacity: 0.5;
+
+  }
+
+  .glucose-mean {
+    stroke: steelblue;
+    stroke-dasharray : "4,4";
+    stroke-opacity: 0.5;
+
+  }
+
+}
