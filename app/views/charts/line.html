@@ -19,7 +19,7 @@
     <g class="medicines">
       <g class="medicine" ng-attr-transform="translate(0, {{(graph.height - 50 * $index)*1}})" ng-repeat="medicine in medData">
         <text x="10" y="0" dy=".32em" style="text-anchor: start;">{{medicine.name}}</text>
-        <circle ng-attr-cx="{{med.cx}}" cy="20" r="5" class="medicine {{med.className}}" ng-repeat="med in medicine.data" ></circle>
+        <rect ng-attr-x="{{med.cx}}" y="20" width="15" height="10" class="medicine {{med.className}}" ng-repeat="med in medicine.data" ></circle>
       </g>
     </g>
 
