@@ -24,16 +24,20 @@
             <h4>{{$index+1}}. {{p.name}}</h4>
           </div>
           <div class="row" ng-if="p.type != 'data'">
-            <div class="col-xs-5 col-xs-offset-1">
-              <h4><input type="radio" class="" value="taken" ng-model="p.taken" ng-click="updateMedicineInfo(p, 'taken')"/> Taken</h4>
+            <div class="col-xs-10 col-xs-offset-1">
+              <select name="{{p.name}}-$index" id="opt-{{p.id}}" class="input-lg form-control text-right"
+                      ng-model="p.value" ng-options="o as o for o in p.optionData ">
+
+              </select>
             </div>
-            <div class="col-xs-5 col-xs-offset-1">
-              <h4><input type="radio" class="" value="not-taken" ng-model="p.taken" ng-click="updateMedicineInfo(p, 'not-taken')"/> Not Taken</h4>
+            <div class="col-xs-10 col-xs-offset-1" ng-model="p.time" ng-show="p.value == 'Previously Taken at'">
+              <timepicker hour-step="1" minute-step="15" show-meridian="true" class="center-time"></timepicker>
             </div>
           </div>
           <div ng-if="p.type == 'data'">
             <div class="col-xs-10 col-xs-offset-1">
-              <select name="{{p.name}}-$index" id="{{p.id}}" class="input-lg form-control text-right" ng-model="p.value" ng-options="o as o for o in p.optionData ">
+              <select name="{{p.name}}-$index" id="{{p.id}}" class="input-lg form-control text-right" ng-model="p.value"
+                      ng-options="o as o for o in p.optionData ">
 
               </select>
             </div>

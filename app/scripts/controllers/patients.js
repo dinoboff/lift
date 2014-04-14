@@ -22,7 +22,7 @@ angular.module('liftApp')
       };
 
       function createPrescription(date, prescription) {
-        var p = {}
+        var p = {};
         p.date = date;
         p.taken = 'not-taken';
         p.type = prescription.type;
@@ -34,7 +34,13 @@ angular.module('liftApp')
           for (var i= p.value; i<prescription.range.end;i++) {
             p.optionData.push(i);
           }
-
+        } else {
+          p.optionData = [];
+          p.optionData.push('Taken');
+          p.optionData.push('Not Taken');
+          p.optionData.push('Previously Taken at');
+          p.value = 'Not Taken';
+          p.time = new Date();
         }
         return p;
       }
