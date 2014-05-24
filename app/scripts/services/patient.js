@@ -36,6 +36,10 @@ app.service('PatientService', ['PatientAPI', function (PatientAPI) {
       return PatientAPI.one('patients', id).all('medication').post(medication);
     },
 
+    updateMonitor: function(id, data) {
+      return PatientAPI.one('patients', id).all('updateMonitor').post(data);
+    },
+
     getPatientById: function (id) {
       return PatientAPI.one('patients', id).get();
     },

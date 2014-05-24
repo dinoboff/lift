@@ -25,6 +25,10 @@ app.constant('PATIENTS', {
         gender: 'male',
         phoneNumber: '12345678901',
         emailAddress: 'patient1@somewhere.com',
+        monitor: {
+          glucose: true,
+          bloodPressure: true
+        },
         prescriptions: [
           {
             id: 1,
@@ -53,27 +57,6 @@ app.constant('PATIENTS', {
             schedule: [1,1,1],
             date: new Date()
           },
-          {
-            id: 4,
-            name: 'Monitor Glucose',
-            schedule: [1,0,1],
-            type: 'data',
-            date: new Date(),
-            range: {
-              start: 80,
-              end: 500
-            }
-          },{
-            id: 5,
-            name: 'Monitor Temperature',
-            schedule: [1,1,1],
-            type: 'data',
-            date: new Date(),
-            range: {
-              start: 90,
-              end: 110
-            }
-          }
         ]
       },
       {
@@ -148,6 +131,22 @@ app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', function($httpBacke
     if (patient) {
       patient.prescriptions = patient.prescriptions || [];
       patient.prescriptions.push(medication);
+    }
+    return [200, patient]
+  });
+
+  $httpBackend.whenPOST(/^api\/v1\/patients\/(\d+)\/updateMonitor/).respond(function(method, url, data) {
+    console.log(data);
+    var regex = /^api\/v1\/patients\/(\d+)\/updateMonitor/;
+    var match = regex.exec(url);
+    var id = match[1];
+    var patient = findPatientById(id);
+
+    var monitor = JSON.parse(data);
+    console.log(monitor);
+    if (patient) {
+      patient.monitor = patient.monitor || {};
+      patient.monitor[monitor.type] = monitor.value;
     }
     return [200, patient]
   });
