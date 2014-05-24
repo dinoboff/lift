@@ -5,6 +5,18 @@
   </div>
 
   <div class="modal-body">
+    <h4>Collect</h4>
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" ng-model="patient.monitor.bloodPressure" ng-change="updateMonitor('bloodPressure')"/> Monitor Blood Pressure
+        </label>
+    </div>
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" ng-model="patient.monitor.glucose" ng-change="updateMonitor('glucose')"/> Monitor Glucose Levels
+        </label>
+    </div>
+    <h4>Prescriptions</h4>
     <table class="table table-striped table-bordered">
       <thead>
       <tr>

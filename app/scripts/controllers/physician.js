@@ -47,6 +47,7 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
       windowClass: 'prescription-modal',
       resolve: {
         patient: function () {
+          console.log("Resolving from the db....");
           return PatientService.getPatientById(patientId);
         }
       }
@@ -125,9 +126,21 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
       $scope.medication.date = new Date();
       PatientService.addMedication(patient.id, $scope.medication).then(function() {
         $scope.patient.prescriptions.push($scope.medication);
+        console.log($scope.patient);
+        $scope.medication = angular.extend({}, defaultMedication);
       });
 
     }
-  }
+  };
+
+  $scope.updateMonitor = function(type) {
+    var value = $scope.patient.monitor.glucose;
+    var data = {"type":type, 'value':value};
+    PatientService.updateMonitor(patient.id, data).then(function() {
+      $scope.patient.monitor.glucose = value;
+    });
+  };
+
+
 
 }]);
