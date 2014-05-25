@@ -60,17 +60,18 @@ angular.module('liftApp')
               morning.medications.push(p);
             }
             if (schedule[1] == 1) {
-              var p = createPrescription(date, prescription);
+              p = createPrescription(date, prescription);
               afternoon.medications.push(p);
             }
 
             if (schedule[2] == 1) {
-              var p = createPrescription(date, prescription);
+              p = createPrescription(date, prescription);
               evening.medications.push(p);
             }
 
           }
         });
+
         result.push(morning);
         result.push(afternoon);
         result.push(evening);

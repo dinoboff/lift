@@ -15,13 +15,13 @@
     </div>
   </div>
   <div class="container-fluid">
-    <div ng-repeat="day in selectedPrescriptions">
+    <div ng-repeat="day in selectedPrescriptions" ng-init="monitor = patient.monitor">
       <h2 class="well">{{day.name}}</h2>
       <hr/>
       <div ng-repeat="p in day.medications">
         <div class="row">
           <div class="col-xs-12">
-            <h4>{{$index+1}}. {{p.name}}</h4>
+            <h4>{{p.name}}</h4>
           </div>
           <div class="row" ng-if="p.type != 'data'">
             <div class="col-xs-10 col-xs-offset-1">
@@ -45,4 +45,38 @@
           </div>
         </div>
       </div>
+
+      <div ng-if="monitor.glucose == true">
+        <div class="row">
+          <div class="col-xs-12">
+            <h4>Glucose</h4>
+          </div>
+          <div class="col-xs-3 col-xs-offset-1">
+            <label>Fasting</label><input type="text" class="input-lg form-control"/>
+          </div>
+          <div class="col-xs-3 col-xs-offset-1">
+            <label>Random</label><input type="text" class="input-lg form-control"/>
+          </div>
+          <div class="col-xs-3 col-xs-offset-1">
+            <label>Temperature</label><input type="text" class="input-lg form-control"/>
+          </div>
+        </div>
+      </div>
+      <div ng-if="monitor.bloodPressure == true">
+        <div class="row">
+          <div class="col-xs-12">
+            <h4>Blood Pressure</h4>
+          </div>
+          <div class="col-xs-3 col-xs-offset-1">
+            <label>Systolic</label><input type="text" class="input-lg form-control"/>
+          </div>
+          <div class="col-xs-3 col-xs-offset-1">
+            <label>Diastolic</label><input type="text" class="input-lg form-control"/>
+          </div>
+          <div class="col-xs-3 col-xs-offset-1">
+            <label>Pulse</label><input type="text" class="input-lg form-control"/>
+          </div>
+        </div>
+      </div>
+    </div>
 </section>
