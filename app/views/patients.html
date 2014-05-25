@@ -15,6 +15,16 @@
     </div>
   </div>
   <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-12">
+        <h4>How are you feeling ?</h4>
+        <select name="feeling" id="feeling" class="input-lg form-control text-right"
+                ng-model="status" ng-options="o as o for o in feelingOptions ">
+
+        </select>
+
+      </div>
+    </div>
     <div ng-repeat="day in selectedPrescriptions" ng-init="monitor = patient.monitor">
       <h2 class="well">{{day.name}}</h2>
       <hr/>

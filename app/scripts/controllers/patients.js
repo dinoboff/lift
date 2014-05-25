@@ -6,6 +6,8 @@ angular.module('liftApp')
       $scope.day = "Yesterday";
       $scope.today = new Date();
       $scope.dateStr = $filter('date')($scope.today, "yyyyMMdd");
+      $scope.feelingOptions = ['Bad', 'Good', 'Great', 'Uncomfortable', 'Tired', 'Sleepy', 'Nauseous'];
+      $scope.status = 'Good';
 
       var buildAllPrescriptions = function() {
         var result = {};
@@ -83,6 +85,7 @@ angular.module('liftApp')
 
 
       $scope.selectedPrescriptions = $scope.prescriptions[$scope.dateStr];
+
 
       $scope.toggleDay = function() {
         var currentType = $scope.day;
