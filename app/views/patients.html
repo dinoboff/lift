@@ -22,7 +22,8 @@
                 ng-model="status" ng-options="o as o for o in feelingOptions ">
 
         </select>
-
+        <br/>
+        <input type="text" ng-model="statusOther" ng-show="status == 'Other'" class="input-lg form-control" placeholder="How are you feeling"/>
       </div>
     </div>
     <div ng-repeat="day in selectedPrescriptions" ng-init="monitor = patient.monitor">

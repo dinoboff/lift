@@ -6,8 +6,9 @@ angular.module('liftApp')
       $scope.day = "Yesterday";
       $scope.today = new Date();
       $scope.dateStr = $filter('date')($scope.today, "yyyyMMdd");
-      $scope.feelingOptions = ['Bad', 'Good', 'Great', 'Uncomfortable', 'Tired', 'Sleepy', 'Nauseous'];
+      $scope.feelingOptions = ['Bad', 'Good', 'Great', 'Uncomfortable', 'Tired', 'Sleepy', 'Nauseous', 'Other'];
       $scope.status = 'Good';
+      $scope.statusOther = '';
 
       var buildAllPrescriptions = function() {
         var result = {};
