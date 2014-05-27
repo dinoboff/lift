@@ -29,13 +29,16 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
       medicines: [
         {
            name: 'Aspirin 100mg',
-           value: Math.floor(Math.random() * 2)
+           value: Math.floor(Math.random() * 2),
+           dosage: '1 tablet'
         },{
           name: 'Istamet',
-          value: 1
+          value: 1,
+          dosage: '1 tablet'
         }, {
           name: 'Olmezest',
-          value: Math.floor(Math.random() * 2)
+          value: Math.floor(Math.random() * 2),
+          dosage: '1 tablet',
         }
       ]
     }
@@ -47,6 +50,8 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
         data.push(getData(i,12));
         data.push(getData(i,18));
       }
+    data.firstMonitorName = "Temperature";
+    data.secondMonitorName = "Glucose";
     return data;
   };
 

@@ -18,7 +18,7 @@
     </g>
     <g class="medicines">
       <g class="medicine" ng-attr-transform="translate(0, {{(graph.height - 50 * $index)*1}})" ng-repeat="medicine in medData">
-        <text x="10" y="0" dy=".32em" style="text-anchor: start;">{{medicine.name}}</text>
+        <text x="10" y="0" dy=".32em" style="text-anchor: start;">{{medicine.name}} ({{medicine.dosage}})</text>
         <rect ng-attr-x="{{med.cx}}" y="20" width="15" height="10" class="medicine {{med.className}}" ng-repeat="med in medicine.data" ></circle>
       </g>
     </g>
@@ -26,8 +26,8 @@
     <g class="legend">
       <circle ng-attr-cx="{{graph.width-100}}" cy="-20" r="5" class="tempc"></circle>
       <circle ng-attr-cx="{{graph.width-190}}" cy="-20" r="5" class="glucosec"></circle>
-      <text ng-attr-x="{{graph.width}}" y="-20" dy=".32em" style="text-anchor: end;" class="temp">Temperature</text>
-      <text ng-attr-x="{{graph.width-120}}" y="-20" dy=".32em" style="text-anchor: end;" class="glucose">Glucose</text>
+      <text ng-attr-x="{{graph.width}}" y="-20" dy=".32em" style="text-anchor: end;" class="temp">{{data.firstMonitorName}}</text>
+      <text ng-attr-x="{{graph.width-120}}" y="-20" dy=".32em" style="text-anchor: end;" class="glucose">{{data.secondMonitorName}}</text>
     </g>
 
   </g>

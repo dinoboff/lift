@@ -106,6 +106,7 @@ app.directive('laDataChart', function() {
           if (!s) {
             s = {};
             s.name = medicine.name;
+            s.dosage = medicine.dosage;
             s.data = [];
             medicineCircles[medicine.name] = s;
           }
