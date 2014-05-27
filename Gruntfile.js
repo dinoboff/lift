@@ -273,6 +273,10 @@ module.exports = function (grunt) {
       html: '<%= yeoman.app %>/index.html',
       options: {
         dest: '<%= yeoman.dist %>',
+        flow: {
+          steps: {'js': ['concat'], css: ['concat', 'cssmin']},
+          post: {}
+        }
       }
     },
     usemin: {
