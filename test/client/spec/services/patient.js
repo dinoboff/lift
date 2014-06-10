@@ -3,7 +3,7 @@
 describe('Service: PatientService', function () {
 
   // load the service's module
-  beforeEach(module('liftApp.mocked'));
+  beforeEach(module('liftApp'));
 
   // instantiate service
   var PatientService;

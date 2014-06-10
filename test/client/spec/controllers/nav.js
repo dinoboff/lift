@@ -2,7 +2,7 @@
 
 describe('Controller: NavCtrl', function() {
 
-  beforeEach(module('liftApp.mocked'));
+  beforeEach(module('liftApp'));
 
   var NavbarCtrl,
       location,
