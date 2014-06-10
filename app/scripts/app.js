@@ -8,7 +8,6 @@ var app = angular.module('liftApp', [
   'ngProgress',
   'ui.calendar',
   'ui.bootstrap',
-  'restangular'
 ]);
 
 app.constant('API_BASE_URL', 'api/v1');

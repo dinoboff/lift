@@ -1,52 +1,59 @@
 'use strict';
 
-var interceptor = function (data, operation, what) {
-  var resp;
-
-  if (operation === 'getList') {
-    resp = data[what] ? data[what] : [];
-    resp.cursor = data.cursor ? data.cursor : null;
-  } else {
-    resp = data;
-  }
-  return resp;
-};
-
 var app = angular.module('liftApp');
 
-app.service('PatientAPI', ['Restangular', 'API_BASE_URL', function (Restangular, API_BASE_URL) {
-  return Restangular.withConfig(function (RestangularConfigurer) {
-    RestangularConfigurer.setBaseUrl(API_BASE_URL);
-    RestangularConfigurer.addResponseInterceptor(interceptor);
-  });
-}]);
-
-
-app.service('PatientService', ['PatientAPI', function (PatientAPI) {
+app.service('PatientService', ['$q','PATIENTS', function ($q, PATIENTS) {
   return {
     getPatients: function () {
-      return PatientAPI.all('patients').getList();
+      var defer = $q.defer();
+      var patients = PATIENTS.data.patients;
+      defer.resolve(patients);
+      return defer.promise;
     },
 
     addPatient: function (patient) {
-      return PatientAPI.all('patients').post(patient);
+      return PATIENTS.data.patients.push(patient);
     },
 
     addMedication: function (id, medication) {
-      return PatientAPI.one('patients', id).all('medication').post(medication);
+      var defer = $q.defer();
+      this.getPatientById(id).then(function(patient) {
+        if (patient) {
+          patient.prescriptions.push(medication);
+          defer.resolve(patient);
+        }
+      });
+      return defer.promise;
     },
 
     updateMonitor: function(id, data) {
-      return PatientAPI.one('patients', id).all('updateMonitor').post(data);
+      var defer = $q.defer();
+      this.getPatientById(id).then(function(patient){
+        console.log(patient);
+        if(patient) {
+          patient.monitor = patient.monitor || {};
+          patient.monitor[data.type] = data.value;
+          defer.resolve(patient);
+        }
+      });
+      return defer.promise;
     },
 
     getPatientById: function (id) {
-      return PatientAPI.one('patients', id).get();
+      var defer = $q.defer();
+      var patients = PATIENTS.data.patients;
+      var returnResult = null;
+      patients.forEach(function(patient){
+          if(patient.id == id) {
+            returnResult = patient;
+          }
+      });
+      defer.resolve(returnResult);
+      return defer.promise;
     },
 
     getMedicationInformation: function (id, date) {
-      return PatientAPI.one('patients', id).one('medication').get();
+      return {};
     }
   }
-
 }]);
