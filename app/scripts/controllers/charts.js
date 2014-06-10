@@ -1,4 +1,4 @@
-var app = angular.module('liftApp')
+var app = angular.module('liftApp');
 
 app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function ($scope, $location, selectedPatient) {
   $scope.patient = selectedPatient;
@@ -38,7 +38,7 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
         }, {
           name: 'Olmezest',
           value: Math.floor(Math.random() * 2),
-          dosage: '1 tablet',
+          dosage: '1 tablet'
         }
       ]
     }
@@ -56,5 +56,19 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
   };
 
 
-  $scope.data = generateData(5);
+  $scope.chartData = [];
+
+  if($scope.patient.monitor) {
+
+    if($scope.patient.monitor.glucose) {
+      var data = generateData(5);
+      data.name = "Glucose";
+      $scope.chartData.push(data);
+    }
+    if($scope.patient.monitor.bloodPressure) {
+      data = generateData(5);
+      data.name = "Blood Pressure";
+      $scope.chartData.push(data);
+    }
+  }
 }]);

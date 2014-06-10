@@ -68,7 +68,10 @@ app.constant('PATIENTS', {
         dateOfBirth: new Date(),
         gender: 'female',
         phoneNumber: '12345678901',
-        emailAddress: 'patient2@somewhere.com'
+        emailAddress: 'patient2@somewhere.com',
+        monitor: {
+          bloodPressure: true,
+        }
       }
     ]
 

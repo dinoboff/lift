@@ -18,6 +18,11 @@
 <div class="container top-container">
   <h2>{{patient.name}}</h2>
   <hr/>
-  <la-data-chart data="data"></la-data-chart>
+  <tabset>
+    <tab heading="{{data.name}} Chart" ng-repeat="data in chartData">
+      <la-data-chart data="data"></la-data-chart>
+    </tab>
+  </tabset>
+
 </div>
 
