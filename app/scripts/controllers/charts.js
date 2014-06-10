@@ -24,8 +24,8 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
   var getData = function(day, time) {
     return {
       date: getDate(day, time),
-      glucose: randGlucose(),
-      temp: randTemp(),
+      glucose: [randGlucose(), randGlucose()+10],
+      temp: [randTemp()],
       medicines: [
         {
            name: 'Aspirin 100mg',

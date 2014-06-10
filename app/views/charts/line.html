@@ -9,13 +9,13 @@
     <text x="30" ng-attr-y="{{glucoseMean - 10}}" dy=".32em" style="text-anchor: start;fill:steelblue" >{{meanGlucose|number:2}}</text>
     <text x="30" ng-attr-y="{{tempMean - 10}}" dy=".32em" style="text-anchor: start;fill:red" >{{meanTemp|number:2}}° C</text>
 
-    <g class="glucose">
-      <path ng-attr-d="{{line1Path}}" class="glucose"></path>
+    <g class="glucose" ng-repeat="path in leftLinesPath">
+      <path ng-attr-d="{{path}}" class="glucose"></path>
       <circle ng-attr-cx="{{c.cx}}" ng-attr-cy="{{c.cy}}" r="4" ng-repeat="c in glCircles" class="data-circle-glucose"></circle>
     </g>
 
-    <g class="temp">
-      <path ng-attr-d="{{line2Path}}" class="temp"></path>
+    <g class="temp" ng-repeat="path in rightLinesPath">
+      <path ng-attr-d="{{path}}" class="temp"></path>
       <circle ng-attr-cx="{{c.cx}}" ng-attr-cy="{{c.cy}}" r="4" ng-repeat="c in tempCircles"></circle>
     </g>
 

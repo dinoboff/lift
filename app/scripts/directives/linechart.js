@@ -67,44 +67,76 @@ app.directive('laDataChart', function ($compile) {
         return d.date;
       }));
 
+
+
       var maxGlucose = d3.max(scope.data, function (d) {
-        return d.glucose
+        var max = d3.max(d3.entries(d.glucose), function(d){
+          return d.value;
+        });
+        return max;
       }) + 10;
 
       var minGlucose = d3.min(scope.data, function (d) {
-        return d.glucose
+        var min = d3.min(d3.entries(d.glucose), function(d){
+          return d.value;
+        });
+        return min;
+
       });
 
+
+
       scope.meanGlucose = d3.mean(scope.data, function (d) {
-        return d.glucose
+        var mean = d3.mean(d3.entries(d.glucose), function(d){
+          return d.value;
+        });
+        return mean;
       });
 
       var maxTemp = d3.max(scope.data, function (d) {
-        return d.temp
+        var max = d3.max(d3.entries(d.temp), function(d){
+          return d.value;
+        });
+        return max;
       }) + 10;
 
       var minTemp = d3.min(scope.data, function (d) {
-        return d.temp
+        var min = d3.min(d3.entries(d.temp), function(d){
+          return d.value;
+        });
+        return min;
+
       });
 
       scope.meanTemp = d3.mean(scope.data, function (d) {
-        return d.temp
+        var mean = d3.mean(d3.entries(d.glucose), function(d){
+          return d.value;
+        });
+        return mean;
       });
 
       var y1 = d3.scale.linear().domain([minGlucose, maxGlucose]).range([scope.graph.height / 2, 0]);
       var y2 = d3.scale.linear().domain([minTemp, maxTemp]).range([scope.graph.height / 2, 0]);
 
-      var line1 = d3.svg.line().x(function (d, i) {
-        return x(d.date)
-      }).y(function (d, i) {
-        return y1(d.glucose)
-      }).interpolate('linear');
+      var leftLines = [];
+      for(var i=0;i<2;i++) {
+        var line1 = d3.svg.line().x(function (d) {
+          return x(d.date)
+        }).y(function (d) {
+          return y1(d.glucose[i])
+        }).interpolate('linear');
+        leftLines.push(line1);
+      }
 
-      var line2 = d3.svg.line().x(function (d, i) {
-        return x(d.date)
-      }).y(function (d, i) {
-        return y2(d.temp)
-      }).interpolate('linear');
+      var rightLines = [];
+      for(i=0;i<1;i++) {
+        var line2 = d3.svg.line().x(function (d) {
+          return x(d.date)
+        }).y(function (d) {
+          return y2(d.temp[i])
+        }).interpolate('linear');
+        rightLines.push(line2);
+      }
 
 
       scope.glucoseMean = y1(scope.meanGlucose);
@@ -129,13 +161,21 @@ app.directive('laDataChart', function ($compile) {
 
       //This needs to be put into the template later.
       var svg = d3.select("." + classId + " svg g");
-      console.log(svg);
       svg.append("g").attr("class", "x axis ").attr('transform', 'translate(0,' + scope.graph.height / 2 + ')').call(xAxis);
       svg.append("g").attr("class", "y axis glucose").call(yAxis1);
       svg.append("g").attr("class", "y axis temp").attr('transform', 'translate(' + scope.graph.width + ',0)').call(yAxis2);
 
-      scope.line1Path = line1(scope.data);
-      scope.line2Path = line2(scope.data);
+      scope.leftLinesPath = [];
+      scope.rightLinesPath = [];
+      for(i=0;i<2;i++) {
+        var p =leftLines[i](scope.data)
+        scope.leftLinesPath.push(p);
+        console.log(p);
+      }
+
+      for(i=0;i<1;i++) {
+        scope.rightLinesPath.push(rightLines[i](scope.data));
+      }
 
       scope.glCircles = [];
       scope.tempCircles = [];
@@ -143,8 +183,18 @@ app.directive('laDataChart', function ($compile) {
       var medicineCircles = {};
       //yuck
       angular.forEach(scope.data, function (d) {
-        var circle1 = {cx: x(d.date), cy: y1(d.glucose)};
-        var circle2 = {cx: x(d.date), cy: y2(d.temp)};
+        var len = d.glucose.length;
+
+        for(var i=0;i<len;i++) {
+          var circle = {cx: x(d.date), cy: y1(d.glucose[i])};
+          scope.glCircles.push(circle);
+        }
+
+        len = d.temp.length;
+        for(i=0;i<len;i++) {
+          var circle = {cx: x(d.date), cy: y2(d.temp[i])};
+          scope.tempCircles.push(circle);
+        }
         angular.forEach(d.medicines, function (medicine, index) {
           var s = medicineCircles[medicine.name];
           if (!s) {
@@ -157,8 +207,6 @@ app.directive('laDataChart', function ($compile) {
           var className = medicine.value == 1 ? "taken" : "not-taken";
           s.data.push({className: className, cx: x(d.date)});
         });
-        scope.glCircles.push(circle1);
-        scope.tempCircles.push(circle2);
       });
 
       scope.medData = medicineCircles;
