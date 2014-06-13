@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('liftApp');
-app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function ($scope, $modal, PatientService) {
+app.controller('PhysicianCtrl', ['$rootScope','$scope', '$modal', 'PatientService', function ($rootScope, $scope, $modal, PatientService) {
 
   var defaultDate = new Date();
   defaultDate.setMonth(defaultDate.getMonth() - 12);
@@ -12,7 +12,7 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
   };
 
   var getPatients = function() {
-    PatientService.getPatients().then(function (patients) {
+    PatientService.getPatientsForPhysician($scope.loggedInUserId).then(function (patients) {
       $scope.patients = patients;
     });
   };

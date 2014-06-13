@@ -11,6 +11,23 @@ app.service('PatientService', ['$q','PATIENTS', function ($q, PATIENTS) {
       return defer.promise;
     },
 
+    getPatientsForPhysician: function(physicianId) {
+      if(physicianId == -1)
+        return this.getPatients();
+      var defer = $q.defer();
+      var patients = PATIENTS.data.patients;
+      var result = [];
+      patients.forEach(function(p) {
+        console.log(p);
+        if(p.physicianId === physicianId) {
+          result.push(p);
+        }
+      });
+      defer.resolve(result);
+      return defer.promise;
+    },
+
+
     addPatient: function (patient) {
       return PATIENTS.data.patients.push(patient);
     },

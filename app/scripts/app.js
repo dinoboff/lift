@@ -39,8 +39,16 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         controller: 'ClinicianCtrl'
       })
       .when('/', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/physician', {
         templateUrl: 'views/physician.html',
         controller: 'PhysicianCtrl'
+      })
+      .when('/supervisor', {
+        templateUrl: 'views/physician.html',
+        controller: 'SupervisorCtrl'
       })
       .when('/patients/:patient_id', {
         templateUrl: 'views/patients.html',

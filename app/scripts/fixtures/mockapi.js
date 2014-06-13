@@ -37,7 +37,6 @@ var bloodPressure = ['Diovan','Benicar','Azor','Coreg','Avalide','Altace','Ziac'
 
 var generateBoolean = function() {
   var num = Math.floor(Math.random()*2);
-  console.log(num);
   return num == 0;
 };
 
