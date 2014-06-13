@@ -3,8 +3,140 @@
 'use strict';
 
 
-var app = angular.module('liftApp.mocked', ['restangular','ngMockE2E', 'liftApp']);
+var app = angular.module('liftApp');
 
+
+
+
+var createSupervisor = function() {
+  return {
+    id: 1,
+    name: 'Dr. Supervisor One',
+    email: 'sup@lift.com'
+  }
+};
+
+var createPhysician = function(count, supervisor) {
+  var physicians = [];
+  for(var i=0;i<count;i++) {
+    var p = {
+      id: i+1,
+      name: 'Physician ' + (i+1),
+      supervisor_id: supervisor.id
+    };
+    physicians.push(p);
+  }
+  return physicians;
+};
+
+var firstName = ['Daniel','Lucas','Carter','Noah','William','Owen'];
+var lastName = ['Braxton','Brushwood','Oliver','Kewley','Gustavson','Johnson','Jones','Miller','Wilson','Anderson','Taylor','Thomas','Parker','Collins'];
+
+var glucose = ['Metformin Oral','Glimepride','Onglyza','Prandin','Fortamet','Istamet','Cycloset'];
+var bloodPressure = ['Diovan','Benicar','Azor','Coreg','Avalide','Altace','Ziac','Tenex','Amalong'];
+var schedules = [[1,0,0],[0,0,1],[1,0,1],[1,1,1]];
+
+var generateDOB = function() {
+  var age = Math.floor(Math.random() * 40) + 40;
+  var months = Math.floor(Math.random()*12);
+  var totalDays = age * 365 + months * 30;
+  var totalTimeInMS = totalDays * 24 * 60 * 60 * 1000;
+  var date = new Date().getTime();
+  var newTime = date - totalTimeInMS;
+  return new Date(newTime);
+};
+var generateMedicine = function(bpCount, glucoseCount) {
+  var prescriptions = [];
+  var p = [];
+  var id = 1;
+  for(var i=0;i<bpCount;i++) {
+    var index = Math.floor(Math.random() * bloodPressure.length);
+    while(p.indexOf(index) != -1) {
+      index = Math.floor(Math.random() * bloodPressure.length);
+    }
+    var schedIndex = Math.floor(Math.random() * schedules.length);
+    var prescription = {
+      id: id++,
+      name: bloodPressure[index],
+      type: 'tablet',
+      dose: 1,
+      schedule: schedules[schedIndex],
+      date: new Date()
+    };
+    prescriptions.push(prescription);
+    p.push(index);
+  }
+  for(i=0;i<glucoseCount;i++) {
+    index = Math.floor(Math.random() * glucose.length);
+    while(p.indexOf(index) != -1) {
+      index = Math.floor(Math.random() * glucose.length);
+    }
+    schedIndex = Math.floor(Math.random() * schedules.length);
+    prescription = {
+      id: id++,
+      name: glucose[index],
+      type: 'tablet',
+      dose: 1,
+      schedule: schedules[schedIndex],
+      date: new Date()
+    };
+    console
+    prescriptions.push(prescription);
+    p.push(index);
+  }
+  return prescriptions;
+};
+var generateBoolean = function() {
+  var num = Math.floor(Math.random()*2);
+  return num == 0;
+};
+
+var getName = function(source) {
+  var index = Math.floor(Math.random() * source.length);
+  return source[index];
+};
+
+var createPatient = function(id, physician) {
+  var first = getName(firstName);
+  var last = getName(lastName);
+  var hasDiabetes = generateBoolean();
+  var hasBP = generateBoolean();
+  if (hasDiabetes == false) {
+    hasBP = true;
+  }
+  var countBp = hasBP == true ? 3 : 0;
+  var countGlucose = hasDiabetes == true ? 3 : 0;
+  var meds = generateMedicine(countBp, countGlucose);
+  var gender = generateBoolean() == true ? "male" : "female";
+  return {
+    id: id,
+    physicianId: physician.id,
+    firstName: first,
+    lastName: last,
+    name: first + ", " + last,
+    address: 'Address of the patient ' + id,
+    dateOfBirth: generateDOB(),
+    gender: gender,
+    phoneNumber: '1234567890',
+    emailAddress: 'patient1@somewhere.com',
+    monitor: {
+      glucose: hasDiabetes,
+      bloodPressure: hasBP
+    },
+    prescriptions:meds
+  }
+};
+
+
+var supervisor = createSupervisor();
+var physicians = createPhysician(3, supervisor);
+var patients = [];
+for(var i=0;i<15;i++) {
+  var index = i % 3;
+  var physician = physicians[index];
+  var patient = createPatient(i+1,physician);
+  patients.push(patient);
+}
 
 app.constant('Config', {
   useMocks: true,
@@ -12,176 +144,79 @@ app.constant('Config', {
   fakeDelay: 100
 });
 
+app.constant('SUPERVISOR', supervisor);
+app.constant('PHYSICIAN', physicians);
+
+
 app.constant('PATIENTS', {
   data: {
-    patients: [
-    {
-        id: 1,
-        firstName: 'Patient',
-        lastName: 'One',
-        name: 'Patient One',
-        address: 'Address of the user',
-        dateOfBirth: new Date(),
-        gender: 'male',
-        phoneNumber: '12345678901',
-        emailAddress: 'patient1@somewhere.com',
-        monitor: {
-          glucose: true,
-          bloodPressure: true
-        },
-        prescriptions: [
-          {
-            id: 1,
-            name: 'Amoxicillin',
-            type: 'tablet',
-            quantity: 60,
-            dose: 1,
-            schedule: [1,0,1],
-            date: new Date()
-          },
-          {
-            id: 2,
-            name: 'Doxycycline 100 mg',
-            type: 'capsule',
-            quantity: 60,
-            dose: 1,
-            schedule: [0,0,1],
-            date: new Date()
-          },
-          {
-            id: 3,
-            name: 'Cycloproxyvon 100 mg',
-            type: 'capsule',
-            quantity: 60,
-            dose: 1,
-            schedule: [1,1,1],
-            date: new Date()
-          },
-        ]
-      },
-      {
-        id: 2,
-        name: 'Patient Two',
-        firstName: 'Patient',
-        lastName: 'Two',
-        address: 'Address of the user',
-        dateOfBirth: new Date(),
-        gender: 'female',
-        phoneNumber: '12345678901',
-        emailAddress: 'patient2@somewhere.com',
-        monitor: {
-          bloodPressure: true,
-        }
-      }
-    ]
-
+    patients: patients
   }
 });
 
+/*app.constant('PATIENTS', {
+ data: {
+ patients: [
+ {
+ id: 1,
+ firstName: 'Patient',
+ lastName: 'One',
+ name: 'Patient One',
+ address: 'Address of the user',
+ dateOfBirth: new Date(),
+ gender: 'male',
+ phoneNumber: '12345678901',
+ emailAddress: 'patient1@somewhere.com',
+ monitor: {
+ glucose: true,
+ bloodPressure: true
+ },
+ prescriptions: [
+ {
+ id: 1,
+ name: 'Amoxicillin',
+ type: 'tablet',
+ quantity: 60,
+ dose: 1,
+ schedule: [1,0,1],
+ date: new Date()
+ },
+ {
+ id: 2,
+ name: 'Doxycycline 100 mg',
+ type: 'capsule',
+ quantity: 60,
+ dose: 1,
+ schedule: [0,0,1],
+ date: new Date()
+ },
+ {
+ id: 3,
+ name: 'Cycloproxyvon 100 mg',
+ type: 'capsule',
+ quantity: 60,
+ dose: 1,
+ schedule: [1,1,1],
+ date: new Date()
+ },
+ ]
+ },
+ {
+ id: 2,
+ name: 'Patient Two',
+ firstName: 'Patient',
+ lastName: 'Two',
+ address: 'Address of the user',
+ dateOfBirth: new Date(),
+ gender: 'female',
+ phoneNumber: '12345678901',
+ emailAddress: 'patient2@somewhere.com',
+ monitor: {
+ bloodPressure: true,
+ }
+ }
+ ]
 
-
-app.run(['$httpBackend','API_BASE_URL','Config', 'PATIENTS', function($httpBackend, API_BASE_URL,Config, PATIENTS){
-
-
-  var patientList = PATIENTS;
-  function regEsc(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
-  }
-
-  function findPatientById(id) {
-    var result = null;
-    angular.forEach(patientList.data.patients, function(patient) {
-      if(patient.id == id) {
-        result = patient;
-      }
-    });
-    return result;
-  }
-
-  $httpBackend.whenGET( new RegExp( regEsc( Config.viewDir ) ) ).passThrough();
-
-  $httpBackend.whenGET('api/v1/patients').respond(function(method, url) {
-    return [200, patientList.data];
-  });
-
-  $httpBackend.whenGET(/^api\/v1\/patients\/(\d+)/).respond(function(method,url) {
-    var regex = /^api\/v1\/patients\/(\d+)/;
-    var match = regex.exec(url);
-    var id = match[1];
-
-    var result = findPatientById(id);
-    return [200, result]
-  });
-
-  $httpBackend.whenPOST("api/v1/patients").respond(function(method, url, data) {
-    console.log(""+data);
-    var patient = JSON.parse(data);
-    patient.id = patientList.data.patients.length;
-    console.log(patient);
-    patientList.data.patients.push(patient);
-    return [200, data]
-  });
-
-  $httpBackend.whenPOST(/^api\/v1\/patients\/(\d+)\/medication/).respond(function(method, url, data) {
-    console.log(data);
-    var regex = /^api\/v1\/patients\/(\d+)\/medication/;
-    var match = regex.exec(url);
-    var id = match[1];
-    var patient = findPatientById(id);
-
-    var medication = JSON.parse(data);
-    console.log(medication);
-    if (patient) {
-      patient.prescriptions = patient.prescriptions || [];
-      patient.prescriptions.push(medication);
-    }
-    return [200, patient]
-  });
-
-  $httpBackend.whenPOST(/^api\/v1\/patients\/(\d+)\/updateMonitor/).respond(function(method, url, data) {
-    console.log(data);
-    var regex = /^api\/v1\/patients\/(\d+)\/updateMonitor/;
-    var match = regex.exec(url);
-    var id = match[1];
-    var patient = findPatientById(id);
-
-    var monitor = JSON.parse(data);
-    console.log(monitor);
-    if (patient) {
-      patient.monitor = patient.monitor || {};
-      patient.monitor[monitor.type] = monitor.value;
-    }
-    return [200, patient]
-  });
-
-
-
-}]);
-
-app.config(['$httpProvider', 'Config',function ($httpProvider, Config) {
-  if(!Config.useMocks) return;
-
-  $httpProvider.interceptors.push(function ($q, $timeout, Config, $log) {
-    return {
-      'request': function (config) {
-        $log.log('Requesting ' + config.url, config);
-        return config;
-      },
-      'response': function (response) {
-        var deferred = $q.defer();
-
-        if(response.config.url.indexOf(Config.view_dir) == 0) return response; //Let through views immideately
-
-        //Fake delay on response from APIs and other urls
-        $timeout(function () {
-          deferred.resolve(response);
-        }, Config.fakeDelay);
-
-        return deferred.promise;
-      }
-
-    }
-  })
-
-}]);
-
+ }
+ });
+ */

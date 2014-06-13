@@ -8,7 +8,6 @@ var app = angular.module('liftApp', [
   'ngProgress',
   'ui.calendar',
   'ui.bootstrap',
-  'restangular'
 ]);
 
 app.constant('API_BASE_URL', 'api/v1');
@@ -40,8 +39,16 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         controller: 'ClinicianCtrl'
       })
       .when('/', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/physician', {
         templateUrl: 'views/physician.html',
         controller: 'PhysicianCtrl'
+      })
+      .when('/supervisor', {
+        templateUrl: 'views/physician.html',
+        controller: 'SupervisorCtrl'
       })
       .when('/patients/:patient_id', {
         templateUrl: 'views/patients.html',

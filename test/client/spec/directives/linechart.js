@@ -3,7 +3,7 @@
 describe('Directive: linechart', function () {
 
   // load the directive's module
-  beforeEach(module('liftApp.mocked'));
+  beforeEach(module('liftApp'));
 
   var element,
     scope;

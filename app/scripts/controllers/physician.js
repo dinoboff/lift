@@ -1,7 +1,7 @@
 'use strict';
 
 var app = angular.module('liftApp');
-app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function ($scope, $modal, PatientService) {
+app.controller('PhysicianCtrl', ['$rootScope','$scope', '$modal', 'PatientService', function ($rootScope, $scope, $modal, PatientService) {
 
   var defaultDate = new Date();
   defaultDate.setMonth(defaultDate.getMonth() - 12);
@@ -11,7 +11,13 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
     dateOfBirth: defaultDate
   };
 
-  $scope.patients = PatientService.getPatients().$object;
+  var getPatients = function() {
+    PatientService.getPatientsForPhysician($scope.loggedInUserId).then(function (patients) {
+      $scope.patients = patients;
+    });
+  };
+
+  getPatients();
 
   $scope.patient = defaultPatient;
 
@@ -32,7 +38,7 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
       newPatient.name = newPatient.firstName + " " + newPatient.lastName;
       PatientService.addPatient(newPatient);
       $scope.patient = defaultPatient;
-      $scope.patients = PatientService.getPatients().$object;
+      getPatients();
     }, function () {
       $scope.patient = defaultPatient;
       $scope.canceled = true;
@@ -47,15 +53,17 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
       windowClass: 'prescription-modal',
       resolve: {
         patient: function () {
-          console.log("Resolving from the db....");
-          return PatientService.getPatientById(patientId);
+
+          var p = PatientService.getPatientById(patientId);
+          console.log("Resolving from the db.... " + p);
+          return p;
         }
       }
     });
 
     $scope.prescriptionDialogInstance.result.then(function (item) {
       $scope.patient = defaultPatient;
-      $scope.patients = PatientService.getPatients().$object;
+      getPatients();
     }, function () {
       $scope.patient = defaultPatient;
       $scope.canceled = true;
@@ -124,9 +132,7 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
       var schedule = schedules[$scope.medication.sched];
       $scope.medication.schedule = schedule;
       $scope.medication.date = new Date();
-      PatientService.addMedication(patient.id, $scope.medication).then(function() {
-        $scope.patient.prescriptions.push($scope.medication);
-        console.log($scope.patient);
+      PatientService.addMedication(patient.id, $scope.medication).then(function(patient) {
         $scope.medication = angular.extend({}, defaultMedication);
       });
 
@@ -134,13 +140,10 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
   };
 
   $scope.updateMonitor = function(type) {
-    var value = $scope.patient.monitor.glucose;
+    var value = $scope.patient.monitor[type];
     var data = {"type":type, 'value':value};
-    PatientService.updateMonitor(patient.id, data).then(function() {
-      $scope.patient.monitor.glucose = value;
+    PatientService.updateMonitor(patient.id, data).then(function(patient) {
+
     });
   };
-
-
-
 }]);
