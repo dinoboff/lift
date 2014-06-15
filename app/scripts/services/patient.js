@@ -18,7 +18,6 @@ app.service('PatientService', ['$q','PATIENTS', function ($q, PATIENTS) {
       var patients = PATIENTS.data.patients;
       var result = [];
       patients.forEach(function(p) {
-        console.log(p);
         if(p.physicianId === physicianId) {
           result.push(p);
         }

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Controller: LogincontrollerCtrl', function () {
+describe('Controller: LoginCtrl', function () {
 
   // load the controller's module
   beforeEach(module('liftApp'));
@@ -11,12 +11,11 @@ describe('Controller: LogincontrollerCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    LogincontrollerCtrl = $controller('LogincontrollerCtrl', {
+    LogincontrollerCtrl = $controller('LoginCtrl', {
       $scope: scope
     });
   }));
 
   it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
   });
 });
