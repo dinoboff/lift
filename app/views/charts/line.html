@@ -6,6 +6,12 @@
     <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{glucoseMean}}" ng-attr-y2="{{glucoseMean}}" class="glucose-mean" stroke-dasharray="5,5"></line>
     <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{tempMean}}" ng-attr-y2="{{tempMean}}" class="temp-mean" stroke-dasharray="5,5"></line>
 
+    <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{glucoseMin}}" ng-attr-y2="{{glucoseMin}}" class="glucose-max" stroke-dasharray="5,5"></line>
+    <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{glucoseMax}}" ng-attr-y2="{{glucoseMax}}" class="glucose-max" stroke-dasharray="5,5"></line>
+
+    <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{tempMin}}" ng-attr-y2="{{tempMin}}" class="temp-max" stroke-dasharray="5,5"></line>
+    <line x1="0" ng-attr-x2="{{graph.width}}" ng-attr-y1="{{tempMax}}" ng-attr-y2="{{tempMax}}" class="temp-max" stroke-dasharray="5,5"></line>
+
     <text x="30" ng-attr-y="{{glucoseMean - 10}}" dy=".32em" style="text-anchor: start;fill:steelblue" >{{meanGlucose|number:2}}</text>
     <text x="30" ng-attr-y="{{tempMean - 10}}" dy=".32em" style="text-anchor: start;fill:red" >{{meanTemp|number:2}}° C</text>
 

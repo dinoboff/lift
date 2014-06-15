@@ -52,6 +52,10 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
       }
     data.firstMonitorName = "Temperature";
     data.secondMonitorName = "Glucose";
+    data.maxGlucose = 210;
+    data.minGlucose = 150;
+    data.maxTemp = 103;
+    data.minTemp = 96;
     return data;
   };
 
@@ -65,10 +69,14 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
       data.name = "Glucose";
       $scope.chartData.push(data);
     }
-    if($scope.patient.monitor.bloodPressure) {
+    /*if($scope.patient.monitor.bloodPressure) {
       data = generateData(5);
       data.name = "Blood Pressure";
       $scope.chartData.push(data);
-    }
+    }*/
+  }
+
+  $scope.onChangeMax = function() {
+    console.log($scope.chartData);
   }
 }]);

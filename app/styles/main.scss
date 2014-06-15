@@ -521,10 +521,26 @@ svg {
 
   }
 
+  .temp-max {
+    stroke: red;
+    stroke-dasharray : "4,4";
+    stroke-opacity: 0.6;
+    stroke-width: 2;
+
+  }
+
   .glucose-mean {
     stroke: steelblue;
     stroke-dasharray : "4,4";
     stroke-opacity: 0.5;
+
+  }
+
+  .glucose-max {
+    stroke: steelblue;
+    stroke-dasharray : "4,4";
+    stroke-opacity: 0.7;
+    stroke-width: 2;
 
   }
 }
