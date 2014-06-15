@@ -40,6 +40,7 @@ app.controller('PhysicianCtrl', ['$rootScope','$scope', '$modal', 'PatientServic
       $scope.patient = defaultPatient;
       getPatients();
     }, function () {
+      console.log("Failed...");
       $scope.patient = defaultPatient;
       $scope.canceled = true;
     })
