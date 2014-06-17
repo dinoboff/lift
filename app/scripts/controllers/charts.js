@@ -1,4 +1,4 @@
-var app = angular.module('liftApp')
+var app = angular.module('liftApp');
 
 app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function ($scope, $location, selectedPatient) {
   $scope.patient = selectedPatient;
@@ -24,18 +24,21 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
   var getData = function(day, time) {
     return {
       date: getDate(day, time),
-      glucose: randGlucose(),
-      temp: randTemp(),
+      glucose: [randGlucose(), randGlucose()+10],
+      temp: [randTemp()],
       medicines: [
         {
            name: 'Aspirin 100mg',
-           value: Math.floor(Math.random() * 2)
+           value: Math.floor(Math.random() * 2),
+           dosage: '1 tablet'
         },{
           name: 'Istamet',
-          value: 1
+          value: 1,
+          dosage: '1 tablet'
         }, {
           name: 'Olmezest',
-          value: Math.floor(Math.random() * 2)
+          value: Math.floor(Math.random() * 2),
+          dosage: '1 tablet'
         }
       ]
     }
@@ -47,9 +50,33 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
         data.push(getData(i,12));
         data.push(getData(i,18));
       }
+    data.firstMonitorName = "Temperature";
+    data.secondMonitorName = "Glucose";
+    data.maxGlucose = 210;
+    data.minGlucose = 150;
+    data.maxTemp = 103;
+    data.minTemp = 96;
     return data;
   };
 
 
-  $scope.data = generateData(5);
+  $scope.chartData = [];
+
+  if($scope.patient.monitor) {
+
+    if($scope.patient.monitor.glucose) {
+      var data = generateData(5);
+      data.name = "Glucose";
+      $scope.chartData.push(data);
+    }
+    /*if($scope.patient.monitor.bloodPressure) {
+      data = generateData(5);
+      data.name = "Blood Pressure";
+      $scope.chartData.push(data);
+    }*/
+  }
+
+  $scope.onChangeMax = function() {
+    console.log($scope.chartData);
+  }
 }]);
