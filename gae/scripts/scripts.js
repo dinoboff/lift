@@ -8,7 +8,6 @@ var app = angular.module('liftApp', [
   'ngProgress',
   'ui.calendar',
   'ui.bootstrap',
-  'restangular'
 ]);
 
 app.constant('API_BASE_URL', 'api/v1');
@@ -40,8 +39,16 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
         controller: 'ClinicianCtrl'
       })
       .when('/', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
+      })
+      .when('/physician', {
         templateUrl: 'views/physician.html',
         controller: 'PhysicianCtrl'
+      })
+      .when('/supervisor', {
+        templateUrl: 'views/physician.html',
+        controller: 'SupervisorCtrl'
       })
       .when('/patients/:patient_id', {
         templateUrl: 'views/patients.html',
@@ -72,55 +79,78 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 
 'use strict';
 
-var interceptor = function (data, operation, what) {
-  var resp;
-
-  if (operation === 'getList') {
-    resp = data[what] ? data[what] : [];
-    resp.cursor = data.cursor ? data.cursor : null;
-  } else {
-    resp = data;
-  }
-  return resp;
-};
-
 var app = angular.module('liftApp');
 
-app.service('PatientAPI', ['Restangular', 'API_BASE_URL', function (Restangular, API_BASE_URL) {
-  return Restangular.withConfig(function (RestangularConfigurer) {
-    RestangularConfigurer.setBaseUrl(API_BASE_URL);
-    RestangularConfigurer.addResponseInterceptor(interceptor);
-  });
-}]);
-
-
-app.service('PatientService', ['PatientAPI', function (PatientAPI) {
+app.service('PatientService', ['$q','PATIENTS', function ($q, PATIENTS) {
   return {
     getPatients: function () {
-      return PatientAPI.all('patients').getList();
+      var defer = $q.defer();
+      var patients = PATIENTS.data.patients;
+      defer.resolve(patients);
+      return defer.promise;
     },
 
+    getPatientsForPhysician: function(physicianId) {
+      if(physicianId == -1)
+        return this.getPatients();
+      var defer = $q.defer();
+      var patients = PATIENTS.data.patients;
+      var result = [];
+      patients.forEach(function(p) {
+        if(p.physicianId === physicianId) {
+          result.push(p);
+        }
+      });
+      defer.resolve(result);
+      return defer.promise;
+    },
+
+
     addPatient: function (patient) {
-      return PatientAPI.all('patients').post(patient);
+      return PATIENTS.data.patients.push(patient);
     },
 
     addMedication: function (id, medication) {
-      return PatientAPI.one('patients', id).all('medication').post(medication);
+      var defer = $q.defer();
+      this.getPatientById(id).then(function(patient) {
+        if (patient) {
+          patient.prescriptions.push(medication);
+          defer.resolve(patient);
+        }
+      });
+      return defer.promise;
     },
 
     updateMonitor: function(id, data) {
-      return PatientAPI.one('patients', id).all('updateMonitor').post(data);
+      var defer = $q.defer();
+      this.getPatientById(id).then(function(patient){
+        console.log(patient);
+        if(patient) {
+          patient.monitor = patient.monitor || {};
+          patient.monitor[data.type] = data.value;
+          defer.resolve(patient);
+        }
+      });
+      return defer.promise;
     },
 
     getPatientById: function (id) {
-      return PatientAPI.one('patients', id).get();
+      var defer = $q.defer();
+      var patients = PATIENTS.data.patients;
+      var returnResult = null;
+      patients.forEach(function(patient){
+          if(patient.id == id) {
+            returnResult = patient;
+          }
+      });
+      defer.resolve(returnResult);
+      return defer.promise;
     },
 
     getMedicationInformation: function (id, date) {
-      return PatientAPI.one('patients', id).one('medication').get();
+      return {};
     }
   }
-
 }]);
 
 'use strict';
@@ -213,113 +243,248 @@ app.directive('linechart', function () {
   };
 });
 
-app.directive('holderFix', function() {
+app.directive('holderFix', function () {
   return {
-    link: function(scope, element) {
-      Holder.run({images:element[0], nocss:true});
+    link: function (scope, element) {
+      Holder.run({images: element[0], nocss: true});
     }
   };
 });
 
 
-app.directive('setFocus', function() {
+app.directive('setFocus', function () {
   return {
     restrict: 'E',
-    link: function(scope, element) {
+    link: function (scope, element) {
       element[0].focus();
     }
   }
 });
 
 
-app.directive('laDataChart', function() {
+app.directive('laDataChart', function ($compile) {
+
+  var makeId = function () {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+  };
+
+  var classId = null;
+
   return {
     restrict: 'E',
     scope: {
-      data : '='
+      data: '=',
+      dtype: '@'
     },
     templateUrl: 'views/charts/line.html',
-    link: function(scope, element, attrs) {
-      scope.graph = {width: 800, height: 350};
-      scope.layout = {top: 40, right: 40, bottom: 40, left: 40};
-      scope.totalWidth = scope.graph.width +  scope.layout.left + scope.layout.right;
-      scope.totalHeight = scope.graph.height + scope.layout.top + scope.layout.bottom;
+    link: function (scope, element, attrs) {
+      var svgC = element.children().get(0);
+      if (!classId) {
+        classId = "la-" + makeId();
+        $(svgC).addClass(classId);
+        $(svgC).select()
+      }
 
-      var x = d3.time.scale().rangeRound([0, scope.graph.width]);
-      x.domain(d3.extent(scope.data, function(d) { return d.date; }));
+      scope.$watch('data.maxGlucose', function () {
+        renderGraph();
+      });
+      scope.$watch('data.minGlucose', function () {
+        renderGraph();
+      });
 
-      var maxGlucose = d3.max(scope.data, function(d) {return d.glucose}) + 10;
-      var minGlucose = d3.min(scope.data, function(d) {return d.glucose});
-      scope.meanGlucose = d3.mean(scope.data, function(d) { return d.glucose});
+      scope.$watch('data.maxTemp', function () {
+        renderGraph();
+      });
+      scope.$watch('data.minTemp', function () {
+        renderGraph();
+      });
 
-      var maxTemp = d3.max(scope.data, function(d) {return d.temp}) + 10;
-      var minTemp = d3.min(scope.data, function(d) {return d.temp});
-      scope.meanTemp = d3.mean(scope.data, function(d) { return d.temp});
+      var renderGraph = function () {
+        if (classId) {
+          var axis = $(svgC).find("svg g.axis");
+          if (axis) {
+            axis.empty();
+          }
+        }
+        var svg = d3.select("." + classId + " svg g");
+        scope.graph = {width: 800, height: 350};
+        scope.layout = {top: 40, right: 40, bottom: 40, left: 40};
+        scope.totalWidth = scope.graph.width + scope.layout.left + scope.layout.right;
+        scope.totalHeight = scope.graph.height + scope.layout.top + scope.layout.bottom;
 
-      var y1 = d3.scale.linear().domain([minGlucose, maxGlucose]).range([scope.graph.height/2, 0]);
-      var y2 = d3.scale.linear().domain([minTemp, maxTemp]).range([scope.graph.height/2, 0]);
+        var x = d3.time.scale().rangeRound([0, scope.graph.width]);
 
-      var line1 = d3.svg.line().x(function(d, i) {return x(d.date) }).y(function(d,i) { return y1(d.glucose)}).interpolate('linear');
-      var line2 = d3.svg.line().x(function(d, i) {return x(d.date) }).y(function(d,i) { return y2(d.temp)}).interpolate('linear').interpolate('linear');
+        x.domain(d3.extent(scope.data, function (d) {
+          return d.date;
+        }));
 
 
+        var m = d3.max(scope.data, function (d) {
+          var max = d3.max(d3.entries(d.glucose), function (d) {
+            return d.value;
+          });
+          return max;
+        });
 
-      scope.glucoseMean = y1(scope.meanGlucose);
-      scope.tempMean = y2(scope.meanTemp);
 
-      var yAxis1 = d3.svg.axis()
+        var maxGlucose = Math.max(m, scope.data.maxGlucose) + 20;
+
+
+        m = d3.min(scope.data, function (d) {
+          var min = d3.min(d3.entries(d.glucose), function (d) {
+            return d.value;
+          });
+          return min;
+        });
+
+        var minGlucose = Math.min(m, scope.data.minGlucose) - 20;
+
+
+        scope.meanGlucose = d3.mean(scope.data, function (d) {
+          var mean = d3.mean(d3.entries(d.glucose), function (d) {
+            return d.value;
+          });
+          return mean;
+        });
+
+        m = d3.max(scope.data, function (d) {
+          var max = d3.max(d3.entries(d.temp), function (d) {
+            return d.value;
+          });
+          return max;
+        });
+
+        var maxTemp = Math.max(m, scope.data.maxTemp) + 2;
+
+
+        m = d3.min(scope.data, function (d) {
+          var min = d3.min(d3.entries(d.temp), function (d) {
+            return d.value;
+          });
+          return min;
+        });
+
+        var minTemp = Math.min(m, scope.data.minTemp) - 2;
+
+        scope.meanTemp = d3.mean(scope.data, function (d) {
+          var mean = d3.mean(d3.entries(d.temp), function (d) {
+            return d.value;
+          });
+          return mean;
+        });
+
+        var y1 = d3.scale.linear().domain([minGlucose, maxGlucose]).range([scope.graph.height / 2, 0]);
+        var y2 = d3.scale.linear().domain([minTemp, maxTemp]).range([scope.graph.height / 2, 0]);
+
+        var leftLines = [];
+        for (var i = 0; i < 2; i++) {
+          var line1 = d3.svg.line().x(function (d) {
+            return x(d.date)
+          }).y(function (d) {
+            return y1(d.glucose[i])
+          }).interpolate('linear');
+          leftLines.push(line1);
+        }
+
+        var rightLines = [];
+        for (i = 0; i < 1; i++) {
+          var line2 = d3.svg.line().x(function (d) {
+            return x(d.date)
+          }).y(function (d) {
+            return y2(d.temp[i])
+          }).interpolate('linear');
+          rightLines.push(line2);
+        }
+
+
+        scope.glucoseMean = y1(scope.meanGlucose);
+        scope.tempMean = y2(scope.meanTemp);
+
+        scope.glucoseMax = y1(scope.data.maxGlucose);
+        scope.glucoseMin = y1(scope.data.minGlucose);
+        scope.tempMax = y2(scope.data.maxTemp);
+        scope.tempMin = y2(scope.data.minTemp);
+
+
+        var yAxis1 = d3.svg.axis()
           .scale(y1)
           .orient("left")
           .ticks(6);
 
-      var yAxis2 = d3.svg.axis()
+        var yAxis2 = d3.svg.axis()
           .scale(y2)
           .orient("right")
           .ticks(10);
 
-      var xAxis = d3.svg.axis()
+        var xAxis = d3.svg.axis()
           .scale(x)
           .orient("bottom")
           .tickPadding(8)
           .tickSize(0)
           .ticks(d3.time.hours, 6);
 
-      //This needs to be put into the template later.
-      var svg = d3.select("svg .chart-container");
-      svg.append("g").attr("class", "x axis ").attr('transform', 'translate(0,'+scope.graph.height/2+')').call(xAxis);
-      svg.append("g").attr("class", "y axis glucose").call(yAxis1);
-      svg.append("g").attr("class", "y axis temp").attr('transform', 'translate('+ scope.graph.width +',0)').call(yAxis2);
+        //This needs to be put into the template later.
 
-      scope.line1Path = line1(scope.data);
-      scope.line2Path = line2(scope.data);
+        svg.append("g").attr("class", "x axis ").attr('transform', 'translate(0,' + scope.graph.height / 2 + ')').call(xAxis);
+        svg.append("g").attr("class", "y axis glucose").call(yAxis1);
+        svg.append("g").attr("class", "y axis temp").attr('transform', 'translate(' + scope.graph.width + ',0)').call(yAxis2);
 
-      scope.glCircles = [];
-      scope.tempCircles = [];
-      scope.medData = [];
-      var medicineCircles = {};
-      //yuck
-      angular.forEach(scope.data, function(d) {
-        var circle1 = {cx: x(d.date), cy: y1(d.glucose)};
-        var circle2 = {cx: x(d.date), cy: y2(d.temp)};
-        angular.forEach(d.medicines, function(medicine, index) {
-          var s = medicineCircles[medicine.name];
-          if (!s) {
-            s = {};
-            s.name = medicine.name;
-            s.data = [];
-            medicineCircles[medicine.name] = s;
+        scope.leftLinesPath = [];
+        scope.rightLinesPath = [];
+        for (i = 0; i < 2; i++) {
+          var p = leftLines[i](scope.data)
+          scope.leftLinesPath.push(p);
+        }
+
+        for (i = 0; i < 1; i++) {
+          scope.rightLinesPath.push(rightLines[i](scope.data));
+        }
+
+        scope.glCircles = [];
+        scope.tempCircles = [];
+        scope.medData = [];
+        var medicineCircles = {};
+        //yuck
+        angular.forEach(scope.data, function (d) {
+          var len = d.glucose.length;
+
+          for (var i = 0; i < len; i++) {
+            var circle = {cx: x(d.date), cy: y1(d.glucose[i])};
+            scope.glCircles.push(circle);
           }
-          var className = medicine.value == 1 ? "taken" : "not-taken";
-          s.data.push({className:className, cx:x(d.date)});
-        });
-        scope.glCircles.push(circle1);
-        scope.tempCircles.push(circle2);
-      });
 
-      scope.medData = medicineCircles;
+          len = d.temp.length;
+          for (i = 0; i < len; i++) {
+            var circle = {cx: x(d.date), cy: y2(d.temp[i])};
+            scope.tempCircles.push(circle);
+          }
+          angular.forEach(d.medicines, function (medicine, index) {
+            var s = medicineCircles[medicine.name];
+            if (!s) {
+              s = {};
+              s.name = medicine.name;
+              s.dosage = medicine.dosage;
+              s.data = [];
+              medicineCircles[medicine.name] = s;
+            }
+            var className = medicine.value == 1 ? "taken" : "not-taken";
+            s.data.push({className: className, cx: x(d.date)});
+          });
+        });
+
+        scope.medData = medicineCircles;
+      }
     }
   }
+
 });
+
 'use strict';
 
 angular.module('liftApp')
@@ -546,7 +711,7 @@ app.controller('ClinicianCtrl', ['$scope', function ($scope) {
 'use strict';
 
 var app = angular.module('liftApp');
-app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function ($scope, $modal, PatientService) {
+app.controller('PhysicianCtrl', ['$rootScope','$scope', '$modal', 'PatientService', function ($rootScope, $scope, $modal, PatientService) {
 
   var defaultDate = new Date();
   defaultDate.setMonth(defaultDate.getMonth() - 12);
@@ -556,7 +721,13 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
     dateOfBirth: defaultDate
   };
 
-  $scope.patients = PatientService.getPatients().$object;
+  var getPatients = function() {
+    PatientService.getPatientsForPhysician($scope.loggedInUserId).then(function (patients) {
+      $scope.patients = patients;
+    });
+  };
+
+  getPatients();
 
   $scope.patient = defaultPatient;
 
@@ -577,8 +748,9 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
       newPatient.name = newPatient.firstName + " " + newPatient.lastName;
       PatientService.addPatient(newPatient);
       $scope.patient = defaultPatient;
-      $scope.patients = PatientService.getPatients().$object;
+      getPatients();
     }, function () {
+      console.log("Failed...");
       $scope.patient = defaultPatient;
       $scope.canceled = true;
     })
@@ -592,15 +764,17 @@ app.controller('PhysicianCtrl', ['$scope', '$modal', 'PatientService', function 
       windowClass: 'prescription-modal',
       resolve: {
         patient: function () {
-          console.log("Resolving from the db....");
-          return PatientService.getPatientById(patientId);
+
+          var p = PatientService.getPatientById(patientId);
+          console.log("Resolving from the db.... " + p);
+          return p;
         }
       }
     });
 
     $scope.prescriptionDialogInstance.result.then(function (item) {
       $scope.patient = defaultPatient;
-      $scope.patients = PatientService.getPatients().$object;
+      getPatients();
     }, function () {
       $scope.patient = defaultPatient;
       $scope.canceled = true;
@@ -669,9 +843,7 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
       var schedule = schedules[$scope.medication.sched];
       $scope.medication.schedule = schedule;
       $scope.medication.date = new Date();
-      PatientService.addMedication(patient.id, $scope.medication).then(function() {
-        $scope.patient.prescriptions.push($scope.medication);
-        console.log($scope.patient);
+      PatientService.addMedication(patient.id, $scope.medication).then(function(patient) {
         $scope.medication = angular.extend({}, defaultMedication);
       });
 
@@ -679,15 +851,12 @@ app.controller('PrescriptionInstanceController', ['$scope', '$modalInstance', 'p
   };
 
   $scope.updateMonitor = function(type) {
-    var value = $scope.patient.monitor.glucose;
+    var value = $scope.patient.monitor[type];
     var data = {"type":type, 'value':value};
-    PatientService.updateMonitor(patient.id, data).then(function() {
-      $scope.patient.monitor.glucose = value;
+    PatientService.updateMonitor(patient.id, data).then(function(patient) {
+
     });
   };
-
-
-
 }]);
 
 'use strict';
@@ -842,7 +1011,7 @@ angular.module('liftApp')
       }
   }]);
 
-var app = angular.module('liftApp')
+var app = angular.module('liftApp');
 
 app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function ($scope, $location, selectedPatient) {
   $scope.patient = selectedPatient;
@@ -868,18 +1037,21 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
   var getData = function(day, time) {
     return {
       date: getDate(day, time),
-      glucose: randGlucose(),
-      temp: randTemp(),
+      glucose: [randGlucose(), randGlucose()+10],
+      temp: [randTemp()],
       medicines: [
         {
            name: 'Aspirin 100mg',
-           value: Math.floor(Math.random() * 2)
+           value: Math.floor(Math.random() * 2),
+           dosage: '1 tablet'
         },{
           name: 'Istamet',
-          value: 1
+          value: 1,
+          dosage: '1 tablet'
         }, {
           name: 'Olmezest',
-          value: Math.floor(Math.random() * 2)
+          value: Math.floor(Math.random() * 2),
+          dosage: '1 tablet'
         }
       ]
     }
@@ -891,9 +1063,261 @@ app.controller('ChartsCtrl', ['$scope', '$location', 'selectedPatient', function
         data.push(getData(i,12));
         data.push(getData(i,18));
       }
+    data.firstMonitorName = "Temperature";
+    data.secondMonitorName = "Glucose";
+    data.maxGlucose = 210;
+    data.minGlucose = 150;
+    data.maxTemp = 103;
+    data.minTemp = 96;
     return data;
   };
 
 
-  $scope.data = generateData(5);
+  $scope.chartData = [];
+
+  if($scope.patient.monitor) {
+
+    if($scope.patient.monitor.glucose) {
+      var data = generateData(5);
+      data.name = "Glucose";
+      $scope.chartData.push(data);
+    }
+    /*if($scope.patient.monitor.bloodPressure) {
+      data = generateData(5);
+      data.name = "Blood Pressure";
+      $scope.chartData.push(data);
+    }*/
+  }
+
+  $scope.onChangeMax = function() {
+    console.log($scope.chartData);
+  }
 }]);
+
+
+
+'use strict';
+
+
+var app = angular.module('liftApp');
+
+
+
+
+var createSupervisor = function() {
+  return {
+    id: 1,
+    name: 'Dr. Supervisor One',
+    email: 'sup@lift.com'
+  }
+};
+
+var createPhysician = function(count, supervisor) {
+  var physicians = [];
+  for(var i=0;i<count;i++) {
+    var p = {
+      id: i+1,
+      name: 'Physician ' + (i+1),
+      supervisor_id: supervisor.id
+    };
+    physicians.push(p);
+  }
+  return physicians;
+};
+
+var firstName = ['Daniel','Lucas','Carter','Noah','William','Owen'];
+var lastName = ['Braxton','Brushwood','Oliver','Kewley','Gustavson','Johnson','Jones','Miller','Wilson','Anderson','Taylor','Thomas','Parker','Collins'];
+
+var glucose = ['Metformin Oral','Glimepride','Onglyza','Prandin','Fortamet','Istamet','Cycloset'];
+var bloodPressure = ['Diovan','Benicar','Azor','Coreg','Avalide','Altace','Ziac','Tenex','Amalong'];
+var schedules = [[1,0,0],[0,0,1],[1,0,1],[1,1,1]];
+
+var generateDOB = function() {
+  var age = Math.floor(Math.random() * 40) + 40;
+  var months = Math.floor(Math.random()*12);
+  var totalDays = age * 365 + months * 30;
+  var totalTimeInMS = totalDays * 24 * 60 * 60 * 1000;
+  var date = new Date().getTime();
+  var newTime = date - totalTimeInMS;
+  return new Date(newTime);
+};
+var generateMedicine = function(bpCount, glucoseCount) {
+  var prescriptions = [];
+  var p = [];
+  var id = 1;
+  for(var i=0;i<bpCount;i++) {
+    var index = Math.floor(Math.random() * bloodPressure.length);
+    while(p.indexOf(index) != -1) {
+      index = Math.floor(Math.random() * bloodPressure.length);
+    }
+    var schedIndex = Math.floor(Math.random() * schedules.length);
+    var prescription = {
+      id: id++,
+      name: bloodPressure[index],
+      type: 'tablet',
+      dose: 1,
+      schedule: schedules[schedIndex],
+      date: new Date()
+    };
+    prescriptions.push(prescription);
+    p.push(index);
+  }
+  for(i=0;i<glucoseCount;i++) {
+    index = Math.floor(Math.random() * glucose.length);
+    while(p.indexOf(index) != -1) {
+      index = Math.floor(Math.random() * glucose.length);
+    }
+    schedIndex = Math.floor(Math.random() * schedules.length);
+    prescription = {
+      id: id++,
+      name: glucose[index],
+      type: 'tablet',
+      dose: 1,
+      schedule: schedules[schedIndex],
+      date: new Date()
+    };
+    console
+    prescriptions.push(prescription);
+    p.push(index);
+  }
+  return prescriptions;
+};
+var generateBoolean = function() {
+  var num = Math.floor(Math.random()*2);
+  return num == 0;
+};
+
+var getName = function(source) {
+  var index = Math.floor(Math.random() * source.length);
+  return source[index];
+};
+
+var createPatient = function(id, physician) {
+  var first = getName(firstName);
+  var last = getName(lastName);
+  var hasDiabetes = generateBoolean();
+  var hasBP = generateBoolean();
+  if (hasDiabetes == false) {
+    hasBP = true;
+  }
+  var countBp = hasBP == true ? 3 : 0;
+  var countGlucose = hasDiabetes == true ? 3 : 0;
+  var meds = generateMedicine(countBp, countGlucose);
+  var gender = generateBoolean() == true ? "male" : "female";
+  return {
+    id: id,
+    physicianId: physician.id,
+    firstName: first,
+    lastName: last,
+    name: first + ", " + last,
+    address: 'Address of the patient ' + id,
+    dateOfBirth: generateDOB(),
+    gender: gender,
+    phoneNumber: '1234567890',
+    emailAddress: 'patient1@somewhere.com',
+    monitor: {
+      glucose: hasDiabetes,
+      bloodPressure: hasBP
+    },
+    prescriptions:meds
+  }
+};
+
+
+var supervisor = createSupervisor();
+var physicians = createPhysician(3, supervisor);
+var patients = [];
+for(var i=0;i<15;i++) {
+  var index = i % 3;
+  var physician = physicians[index];
+  var patient = createPatient(i+1,physician);
+  patients.push(patient);
+}
+
+app.constant('Config', {
+  useMocks: true,
+  viewDir: 'views/',
+  fakeDelay: 100
+});
+
+app.constant('SUPERVISOR', supervisor);
+app.constant('PHYSICIAN', physicians);
+
+
+app.constant('PATIENTS', {
+  data: {
+    patients: patients
+  }
+});
+'use strict';
+
+var app = angular.module('liftApp');
+
+app.controller('LoginCtrl', ["$rootScope", "$scope" , "$location", "$timeout", function ($rootScope, $scope, $location, $timeout) {
+  $scope.users = [
+    {
+      name: 'Supervisor',
+      type: 'supervisor',
+      id: -1
+    },
+    {
+      name: 'Physician 1',
+      type: 'physician',
+      id: 1
+    },
+    {
+      name: 'Physician 2',
+      type: 'physician',
+      id: 2
+    },
+    {
+      name: 'Physician 3',
+      type: 'physician',
+      id: 3
+    },
+    {
+      name: 'Patient 1',
+      type: 'patient',
+      id: 1
+    },
+    {
+      name: 'Patient 2',
+      type: 'patient',
+      id: 2
+    }
+  ];
+
+  $scope.login = function (userId, type) {
+    $rootScope.loggedInUserId = userId;
+    $rootScope.userType = type;
+    if(type == 'physician') {
+      $timeout(function () {
+        $location.url("physician/", true);
+      }, 100);
+    } else if(type == 'patient'){
+      $timeout(function(){
+        $location.url("patients/"+userId+"/", true);
+      }, 100);
+    } else if(type == 'supervisor'){
+      $timeout(function(){
+        $location.url("physician/", true);
+      }, 100);
+    }
+
+
+  };
+}]);
+
+'use strict';
+
+angular.module('liftApp')
+  .controller('SupervisorCtrl', ['$scope','PatientService',function ($scope, PatientService) {
+    var getPatients = function() {
+      PatientService.getPatients().then(function (patients) {
+        $scope.patients = patients;
+      });
+    };
+
+    getPatients();
+
+  }]);
